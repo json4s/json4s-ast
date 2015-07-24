@@ -6,9 +6,6 @@ import scala.scalajs.js.annotation.JSExport
 sealed trait JValue
 
 @JSExport
-case object JUndefined extends JValue
-
-@JSExport
 case object JNull extends JValue
 
 @JSExport

@@ -2,8 +2,6 @@ package org.json4s
 
 sealed trait JValue
 
-case object JUndefined extends JValue
-
 case object JNull extends JValue
 
 case class JString(value: String) extends JValue
