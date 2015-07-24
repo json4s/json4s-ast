@@ -1,8 +1,8 @@
+import org.scalameter.PerformanceTest.Microbenchmark
 import org.scalameter.api._
 
-object InlineTest extends PerformanceTest.Quickbenchmark {
-
-
+object InlineTest extends Microbenchmark {
+  
   val sizes: Gen[Int] = Gen.range("size")(300000, 1500000, 300000)
 
   val ints: Gen[Int] = for {
