@@ -11,13 +11,13 @@ case object JNull extends JValue
 case class JString(value: String) extends JValue
 
 object JNumber{
-  @inline def apply(value: Int):JNumber = JNumber(BigDecimal(value))
-  @inline def apply(value: Byte):JNumber = JNumber(BigDecimal(value))
-  @inline def apply(value: Short):JNumber = JNumber(BigDecimal(value))
-  @inline def apply(value: Long):JNumber = JNumber(BigDecimal(value))
-  @inline def apply(value: BigInt):JNumber = JNumber(BigDecimal(value))
-  @inline def apply(value: Float):JNumber = JNumber(BigDecimal.decimal(value))
-  @inline def apply(value: Double):JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: Int): JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: Byte): JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: Short): JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: Long): JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: BigInt): JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: Float): JNumber = JNumber(BigDecimal.decimal(value))
+  @inline def apply(value: Double): JNumber = JNumber(BigDecimal(value))
 }
 
 case class JNumber(value: BigDecimal) extends JValue {
@@ -30,7 +30,7 @@ sealed abstract class JBoolean extends JValue {
 
 object JBoolean {
   @inline def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
-  @inline def unapply(x: JBoolean): Boolean = x.value
+  @inline def unapply(x: JBoolean): Option[Boolean] = Option(x.value)
 }
 case object JTrue extends JBoolean {
   val value = true
