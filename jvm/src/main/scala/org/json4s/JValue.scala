@@ -1,7 +1,5 @@
 package org.json4s
 
-import org.json4s.bigDecimalConverter.BigDecimalConverter
-
 sealed trait JValue
 
 case object JUndefined extends JValue

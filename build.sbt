@@ -22,8 +22,13 @@ lazy val json4sAST = crossProject.in(file(".")).
   ).
   jvmSettings(
     // Add JVM-specific settings here
-    scalacOptions ++= Seq("-target:jvm-1.7","-unchecked", "-deprecation", "-optimize", "-feature", "-Yinline-warnings"),
-    javacOptions ++= Seq("-deprecation", "-Xlint")
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-optimize", "-feature", "-Yinline-warnings"),
+    javacOptions ++= Seq("-deprecation", "-Xlint"),
+    testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework"),
+    libraryDependencies ++= Seq(
+      "com.storm-enroute" %% "scalameter" % "0.6" % "test"
+    ),
+    parallelExecution in Test := false
   ).
   jsSettings(
     // Add JS-specific settings here

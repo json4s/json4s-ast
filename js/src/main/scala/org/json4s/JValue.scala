@@ -1,6 +1,5 @@
 package org.json4s
 
-import org.json4s.bigDecimalConverter.BigDecimalConverter
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
 
