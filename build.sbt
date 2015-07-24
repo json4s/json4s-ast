@@ -1,8 +1,8 @@
 import scala.xml.Group
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.7"
 
-crossScalaVersions := Seq("2.10.0", "2.11.0")
+crossScalaVersions := Seq("2.10.5", "2.11.7")
 
 name := "json4s-ast"
 

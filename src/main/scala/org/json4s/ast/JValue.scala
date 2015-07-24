@@ -1,8 +1,7 @@
 package org.json4s.ast
 
-/**
- * Data type for JSON AST.
- */
+import org.json4s.bigDecimalConverter.BigDecimalConverter
+
 sealed trait JValue
 
 case object JUndefined extends JValue
@@ -11,36 +10,39 @@ case object JNull extends JValue
 
 case class JString(value: String) extends JValue
 
+object JNumber{
+  @inline def apply(value: Int):JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: Byte):JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: Short):JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: Long):JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: BigInt):JNumber = JNumber(BigDecimal(value))
+  @inline def apply(value: Float):JNumber = JNumber(BigDecimal.decimal(value))
+  @inline def apply(value: Double):JNumber = JNumber(BigDecimal(value))
+}
+
 case class JNumber(value: BigDecimal) extends JValue {
-  def toByte = value.byteValue()
-  def toShort = value.shortValue()
-  def toInt = value.intValue()
-  def toLong = value.longValue()
-  def toBigInt = value.toBigInt()
-  def toFloat = value.floatValue()
-  def toDouble = value.doubleValue()
-  def toBigDecimal = value
+  @inline def to[B](implicit bigDecimalConverter: BigDecimalConverter[B]) = bigDecimalConverter(value)
 }
 
-case class JBool(value: Boolean) extends JValue
+sealed abstract class JBoolean extends JValue {
+  val value: Boolean
+}
 
-object JObject {
-  def apply(field: JField, fields: JField*): JObject = new JObject(field +: fields)
+object JBoolean {
+  @inline def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
+  @inline def unapply(x: JBoolean): Boolean = x.value
 }
-case class JObject(value: Seq[JField] = Seq.empty) extends JValue {
-  override def equals(that: Any): Boolean = that match {
-    case o: JObject ⇒ value.toSet == o.value.toSet
-    case _ ⇒ false
-  }
-  override def hashCode = value.toSet[JField].hashCode
+case object JTrue extends JBoolean {
+  val value = true
 }
+case object JFalse extends JBoolean {
+  val value = false
+}
+
+case class JObject(value: Map[String,JValue] = Map.empty) extends JValue
 
 object JArray {
-  def apply(jvalue: JValue, jvalues: JValue*): JArray = new JArray(jvalue +: jvalues)
+  @inline def apply(value: JValue, values: JValue*): JArray = JArray(value +: values.to[collection.immutable.Seq])
+  @inline def apply(value:Seq[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
 }
-case class JArray(value: Seq[JValue] = Seq.empty) extends JValue
-
-object JField {
-  def apply(name: String, value: JValue) = (name, value)
-  def unapply(f: JField): Option[(String, JValue)] = Some(f)
-}
+case class JArray(value: collection.immutable.Seq[JValue] = Nil) extends JValue
