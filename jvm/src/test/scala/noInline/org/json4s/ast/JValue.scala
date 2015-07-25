@@ -1,4 +1,4 @@
-package noInline.org.json4s
+package noInline.org.json4s.ast
 
 sealed trait JValue
 
@@ -43,6 +43,6 @@ case class JObject(value: Map[String,JValue] = Map.empty) extends JValue
 
 object JArray {
   def apply(value: JValue, values: JValue*): JArray = JArray(value +: values.to[collection.immutable.Seq])
-  def apply(value:Seq[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
+  def apply(value: Seq[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
 }
 case class JArray(value: collection.immutable.Seq[JValue] = Nil) extends JValue

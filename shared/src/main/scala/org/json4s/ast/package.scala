@@ -1,6 +1,6 @@
-package org
+package org.json4s
 
-package object json4s {
+package object ast {
   trait BigDecimalConverter[T]{  def apply(b: BigDecimal): T }
 
   object BigDecimalConverter {

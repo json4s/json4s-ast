@@ -1,4 +1,4 @@
-package org.json4s
+package org.json4s.ast
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
@@ -57,8 +57,8 @@ case class JObject(value: Map[String,JValue] = Map.empty) extends JValue
 @JSExport
 object JArray {
   @inline def apply(value: JValue, values: JValue*): JArray = JArray(value +: values.to[collection.immutable.Seq])
-  @inline def apply(value:Seq[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
-  @inline def apply(value:js.Array[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
+  @inline def apply(value: Seq[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
+  @inline def apply(value: js.Array[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
 }
 
 @JSExport

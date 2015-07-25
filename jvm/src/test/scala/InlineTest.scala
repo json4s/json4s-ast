@@ -1,3 +1,5 @@
+import noInline.org.json4s.ast
+import org.json4s.ast.{JArray, JObject, JNumber, JString}
 import org.scalameter.api._
 
 object InlineTest extends PerformanceTest {
@@ -75,33 +77,33 @@ object InlineTest extends PerformanceTest {
     import noInline.org.json4s._
     measure method "A" in {
       using(strings) in {
-        s => JArray(JString(s))
+        s => ast.JArray(ast.JString(s))
       }
     }
     
     measure method "B" in {
       using(bigDecimals) in {
-        b => JArray(JNumber(b))
+        b => ast.JArray(ast.JNumber(b))
       }
     }
 
     measure method "C" in {
       using(bigDecimals) in {
-        b => JArray(JNumber(b)).value.map{
-          case v @ JNumber(_) => v.to[Int]
+        b => ast.JArray(ast.JNumber(b)).value.map{
+          case v @ ast.JNumber(_) => v.to[Int]
         }
       }
     }
 
     measure method "D" in {
       using(floats) in {
-        f => JArray(JNumber(f))
+        f => ast.JArray(ast.JNumber(f))
       }
     }
 
     measure method "E" in {
       using(maps) in {
-        map => JObject(map.map{case (k,v) => (k,JNumber(v))})
+        map => ast.JObject(map.map{case (k,v) => (k,ast.JNumber(v))})
       }
     }
   }

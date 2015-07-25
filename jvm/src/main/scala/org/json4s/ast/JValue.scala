@@ -1,4 +1,4 @@
-package org.json4s
+package org.json4s.ast
 
 sealed trait JValue
 
