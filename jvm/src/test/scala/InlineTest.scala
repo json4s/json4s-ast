@@ -1,7 +1,16 @@
-import org.scalameter.PerformanceTest.Microbenchmark
 import org.scalameter.api._
 
-object InlineTest extends Microbenchmark {
+object InlineTest extends PerformanceTest {
+
+  def warmer = Warmer.Zero
+  def aggregator = Aggregator.min
+  def measurer = new Measurer.IgnoringGC with Measurer.PeriodicReinstantiation {
+    override val defaultFrequency = 12
+    override val defaultFullGC = true
+  }
+  def executor = SeparateJvmsExecutor(warmer, aggregator, measurer)
+  def reporter = new LoggingReporter
+  def persistor = Persistor.None
   
   val sizes: Gen[Int] = Gen.range("size")(300000, 1500000, 300000)
 
