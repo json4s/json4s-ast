@@ -1,6 +1,6 @@
 package org.json4s.ast
 
-sealed trait JValue
+sealed abstract class JValue extends Product with Serializable
 
 case object JNull extends JValue
 

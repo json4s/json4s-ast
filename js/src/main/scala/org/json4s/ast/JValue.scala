@@ -3,7 +3,7 @@ package org.json4s.ast
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
 
-sealed trait JValue
+sealed abstract class JValue extends Product with Serializable
 
 @JSExport
 case object JNull extends JValue
