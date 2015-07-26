@@ -1,17 +1,16 @@
 package org.json4s.ast
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.JSExport
+import scala.scalajs.js.annotation.{JSExportAll, JSExport}
 
 sealed abstract class JValue extends Product with Serializable
 
-@JSExport
+@JSExportAll
 case object JNull extends JValue
 
-@JSExport
+@JSExportAll
 case class JString(value: String) extends JValue
 
-@JSExport
 object JNumber{
   private val mc = BigDecimal.defaultMathContext
   @inline def apply(value: Int): JNumber = JNumber(BigDecimal(value))
@@ -26,40 +25,60 @@ object JNumber{
   @inline def apply(value: Double): JNumber = JNumber(BigDecimal(value))
 }
 
-@JSExport
+@JSExportAll
 case class JNumber(value: BigDecimal) extends JValue {
   @inline def to[B](implicit bigDecimalConverter: BigDecimalConverter[B]) = bigDecimalConverter(value)
+
+  /**
+   * Javascript specification for numbers specify a `Double`, so this is the default export method to `Javascript`
+   * @param value
+   */
+  @JSExportAll def this(value: Double) = {
+    this(BigDecimal(value))
+  }
 }
 
 sealed abstract class JBoolean extends JValue {
   val value: Boolean
 }
 
-@JSExport
 object JBoolean {
   @inline def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
   @inline def unapply(x: JBoolean): Option[Boolean] = Some(x.value)
 }
 
-@JSExport
+@JSExportAll
 case object JTrue extends JBoolean {
   val value = true
 }
 
-@JSExport
+@JSExportAll
 case object JFalse extends JBoolean {
   val value = false
 }
 
-@JSExport
-case class JObject(value: Map[String,JValue] = Map.empty) extends JValue
+case class JObject(value: Map[String,JValue] = Map.empty) extends JValue {
 
-@JSExport
+  /**
+   * Construct a JObject using Javascript's object type, i.e. {} or new Object
+   * @param value
+   */
+  @JSExport def this(value : js.Dictionary[JValue]) = {
+    this(value.toMap)
+  }
+}
+
 object JArray {
   @inline def apply(value: JValue, values: JValue*): JArray = JArray(value +: values.to[collection.immutable.Seq])
   @inline def apply(value: Seq[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
-  @inline def apply(value: js.Array[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
 }
 
-@JSExport
-case class JArray(value: collection.immutable.Seq[JValue] = Nil) extends JValue
+case class JArray(value: collection.immutable.Seq[JValue] = Nil) extends JValue {
+  /**
+   * Construct a JArray using Javascript's array type, i.e. [] or new Array
+   * @param value
+   */
+  @JSExportAll def this(value: js.Array[JValue]) = {
+    this(value.to[collection.immutable.Seq])
+  }
+}
