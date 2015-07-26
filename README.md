@@ -67,6 +67,6 @@ var jObjectWithBoolAndNumberAndNull = new JObject({
     "someString" : jArray,
     "someBool" : JTrue(),
     "someNumber" : JNumber(324324.324),
-    "null: : JNull()
+    "null: JNull()
 });
 ```
