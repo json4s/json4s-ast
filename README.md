@@ -13,14 +13,14 @@ brought in breaking changes in minor releases)
 - Strict adherence to the [JSON](https://en.wikipedia.org/wiki/JSON) standard. 
     - No `JNothing`,`JUndefined` (i.e. no abstraction for a concept of `null` that isn't a `Javascript` `null`, which is
     represented as a `JNull`)
-    - Number representation for `JNumber` is a `BigDecimal`
+    - Number representation for `JNumber` is a `BigDecimal` (http://stackoverflow.com/a/13502497/1519631)
     - `JObject` is an actual `Map[String,JValue]`
     - `JArray` is an `immutable.Seq`. This allows [JSON](https://en.wikipedia.org/wiki/JSON) 
     libraries to provide the best default immutable data structure, with a default that is very good in general cases
     (`Vector`)
 - Support for `Scala` 2.10.x, `Scala` 2.11.x and `Scala.js` 0.6.x
-- Strictly pure. Library has no side effects, and we guarantee that a `JValue` will always contain a valid structure 
-that can be serialized/rendered into [JSON](https://en.wikipedia.org/wiki/JSON)
+- Strictly pure. Library has no side effects/throwing errors, and we guarantee that a `JValue` will 
+always contain a valid structure that can be serialized/rendered into [JSON](https://en.wikipedia.org/wiki/JSON)
 - Public methods are `@inline`. Due to us being very strict on binary releases, we can afford to `@inline` our various
 `apply` methods, providing good performance for using `json4s-ast` before the `JVM` warms up
 
