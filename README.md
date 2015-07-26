@@ -20,7 +20,8 @@ brought in breaking changes in minor releases)
     (`Vector`)
 - Support for `Scala` 2.10.x, `Scala` 2.11.x and `Scala.js` 0.6.x
 - Strictly pure. Library has no side effects/throwing errors, and we guarantee that a `JValue` will 
-always contain a valid structure that can be serialized/rendered into [JSON](https://en.wikipedia.org/wiki/JSON)
+always contain a valid structure that can be serialized/rendered into [JSON](https://en.wikipedia.org/wiki/JSON). There
+is one exception, and that is for `JNumber` in `Scala.js` (see `Scala.js` section for more info)
 - Public methods are `@inline`. Due to us being very strict on binary releases, we can afford to `@inline` our various
 `apply` methods, providing good performance for using `json4s-ast` before the `JVM` warms up
 
@@ -60,13 +61,39 @@ var jObjectWithBool = new JObject({
 var jObjectWithBoolAndNumber = new JObject({
     "someString" : jArray,
     "someBool" : JTrue(),
-    "someNumber" : JNumber(324324.324)
+    "someNumber" : new JNumber(324324.324)
 });
 
 var jObjectWithBoolAndNumberAndNull = new JObject({
     "someString" : jArray,
     "someBool" : JTrue(),
-    "someNumber" : JNumber(324324.324),
+    "someNumber" : new JNumber(324324.324),
     "null: JNull()
 });
 ```
+
+### Differences
+There is one major difference that people need to be aware of when using `json4s-ast` with `Scala.js`, and that is an
+exception may be thrown when using the `JNumber` string constructor. Unfortunately there is no real way around this.
+Javascript doesn't have a standard `BigDecimal` (i.e. unbounded real number type), so the only way to construct a `JNumber`
+larger than specified in the IEEE 754 is to use a `string` representation (JSON specification is that the number can be of any
+size, unlike the `Javascript` specification). This means that if you don't put a valid number as
+a string when calling the `JNumber` constructor in `Javascript`/`Scala.js`, it will error out. As an example below
+
+```javascript
+// How to construct a really large JNumber in Javascript
+var jNumber = new JNumber("34235325322353257498327423.23532875932598234783252325");
+// Understandably, this will error
+var jNumber = new JNumber("this will error");
+```
+
+Obviously in `Javascript`, this will always error out in runtime, but since the `String` constructor is exported for `Scala`
+as well (only in the `Scala.js` artifact, not the `Scala` `JVM` one), you can do this when writing `Scala` with `Scala.js`
+```scala
+val jNumber = new JNumber("this will error")
+```
+This will error out with an exception at runtime. Note that the actual exception is not known (this depends on the `Scala.js`
+implementation of `BigDecimal` which may change) so you should **NOT** try and catch it. 
+You just need to be strict and not use the `JNumber` string constructor in `Scala` so that this error is never thrown.
+
+When using `Scala` on the `JVM` there is no exported `String` method for `JNumber`.
