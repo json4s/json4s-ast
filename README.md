@@ -41,11 +41,11 @@ compatibility issues.
 `json4s-ast` also provides support for [Scala.js](https://github.com/scala-js/scala-js). 
 There is even a separate `AST` specifically for `Scala.js` with `@JSExport` for the various `JValue` types, 
 which means you are able to construct a `JValue` in `Javascript`in the rare cases that you may need to do so. 
-Hence there are added constructors for `JArray`, that lets you pass in a `Javascript` `array` (i.e. `[]`) 
+Hence there are added constructors for various `JValue` subtypes, i.e. you can pass in a `Javascript` `array` (i.e. `[]`) 
 to construct a `JArray`, as well as a constructor for `JObject` that allows you to pass in a standard `Javascript` 
-object with `JValue` as keys (i.e. `{}`)
+object with `JValue` as keys (i.e. `{}`).
 
-Examples of constructing various `JValue`'s are given below
+Examples of constructing various `JValue`'s are given below.
 
 ```javascript
 var jArray = new JArray([new JString("test")]);
