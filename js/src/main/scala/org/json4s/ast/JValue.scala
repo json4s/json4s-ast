@@ -13,21 +13,21 @@ case class JString(value: String) extends JValue
 
 object JNumber{
   private val mc = BigDecimal.defaultMathContext
-  @inline def apply(value: Int): JNumber = JNumber(BigDecimal(value))
-  @inline def apply(value: Byte): JNumber = JNumber(BigDecimal(value))
-  @inline def apply(value: Short): JNumber = JNumber(BigDecimal(value))
-  @inline def apply(value: Long): JNumber = JNumber(BigDecimal(value))
-  @inline def apply(value: BigInt): JNumber = JNumber(BigDecimal(value))
-  @inline def apply(value: Float): JNumber = JNumber({
+  def apply(value: Int): JNumber = JNumber(BigDecimal(value))
+  def apply(value: Byte): JNumber = JNumber(BigDecimal(value))
+  def apply(value: Short): JNumber = JNumber(BigDecimal(value))
+  def apply(value: Long): JNumber = JNumber(BigDecimal(value))
+  def apply(value: BigInt): JNumber = JNumber(BigDecimal(value))
+  def apply(value: Float): JNumber = JNumber({
     // BigDecimal.decimal doesn't exist on 2.10, so this is just the 2.11 implementation
     new BigDecimal(new java.math.BigDecimal(value.toString, mc), mc) // Need to check that this will work on Scala.js
   })
-  @inline def apply(value: Double): JNumber = JNumber(BigDecimal(value))
+  def apply(value: Double): JNumber = JNumber(BigDecimal(value))
 }
 
 @JSExportAll
 case class JNumber(value: BigDecimal) extends JValue {
-  @inline def to[B](implicit bigDecimalConverter: BigDecimalConverter[B]) = bigDecimalConverter(value)
+  def to[B](implicit bigDecimalConverter: BigDecimalConverter[B]) = bigDecimalConverter(value)
 
   /**
    * Javascript specification for numbers specify a `Double`, so this is the default export method to `Javascript`
@@ -53,8 +53,8 @@ sealed abstract class JBoolean extends JValue {
 }
 
 object JBoolean {
-  @inline def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
-  @inline def unapply(x: JBoolean): Option[Boolean] = Some(x.value)
+  def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
+  def unapply(x: JBoolean): Option[Boolean] = Some(x.value)
 }
 
 @JSExportAll
@@ -79,8 +79,8 @@ case class JObject(value: Map[String,JValue] = Map.empty) extends JValue {
 }
 
 object JArray {
-  @inline def apply(value: JValue, values: JValue*): JArray = JArray(value +: values.to[collection.immutable.Seq])
-  @inline def apply(value: Seq[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
+  def apply(value: JValue, values: JValue*): JArray = JArray(value +: values.to[collection.immutable.Seq])
+  def apply(value: Seq[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
 }
 
 case class JArray(value: collection.immutable.Seq[JValue] = Nil) extends JValue {

@@ -24,7 +24,6 @@ brought in breaking changes in minor releases)
 always contain a valid structure that can be serialized/rendered into [JSON](https://en.wikipedia.org/wiki/JSON). There
 is one exception, and that is for `JNumber` in `Scala.js` (see `Scala.js` section for more info)
 - Fully immutable (all collections/types used are immutable)
-- Public methods are `@inline`. Due to us being very strict on binary releases, we can afford to `@inline` our various
 `apply` methods, providing good performance for using `json4s-ast` before the `JVM` warms up
 
 ## Why
