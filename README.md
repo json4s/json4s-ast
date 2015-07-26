@@ -1,6 +1,7 @@
 # JSON4S AST
 
-A minimal implementation of a [JSON](https://en.wikipedia.org/wiki/JSON) `AST` that is designed to be commonly used by other libraries
+A minimal implementation of a [JSON](https://en.wikipedia.org/wiki/JSON) `AST` that is designed 
+to be commonly used by other libraries
 
 ## Goals
 - [Scala.js](https://github.com/scala-js/scala-js) support, allowing the possibility of 
@@ -40,7 +41,7 @@ compatibility issues.
 
 ## Scala.js
 `json4s-ast` also provides support for [Scala.js](https://github.com/scala-js/scala-js). 
-There is even a separate `AST` specifically for `Scala.js` with `@JSExport` for the various `JValue` types, 
+There is even a separate `AST` implementation specifically for `Scala.js` with `@JSExport` for the various `JValue` types, 
 which means you are able to construct a `JValue` in `Javascript`in the rare cases that you may need to do so. 
 Hence there are added constructors for various `JValue` subtypes, i.e. you can pass in a `Javascript` `array` (i.e. `[]`) 
 to construct a `JArray`, as well as a constructor for `JObject` that allows you to pass in a standard `Javascript` 
@@ -77,9 +78,10 @@ There is one major difference that people need to be aware of when using `json4s
 exception may be thrown when using the `JNumber` `String` constructor. Unfortunately there is no real way around this.
 `Javascript` doesn't have a standard `BigDecimal` (i.e. unbounded real number type), so the only way to construct a `JNumber`
 larger than specified in the IEEE 754 in `Javascript` is to use a `String` representation 
-(JSON specification is that the number can be of any size, unlike the `Javascript` specification). 
-This means that if you don't put a valid number as a string when calling the `JNumber` constructor in `Javascript`/`Scala.js`, 
-it will error out. As an example below
+([JSON](https://en.wikipedia.org/wiki/JSON) [specification](http://stackoverflow.com/a/13502497/1519631) is that the 
+number can be of any size, unlike the `Javascript` [specification](http://stackoverflow.com/a/3605960/1519631)). 
+This means that if you don't put a valid number as a `String` when calling the `JNumber` constructor 
+in `Javascript`/`Scala.js`, it will error out. As an example below
 
 ```javascript
 // How to construct a really large JNumber in Javascript
@@ -96,6 +98,6 @@ val jNumber = new JNumber("this will error")
 This will error out with an exception at runtime. Note that the actual exception is not known (this depends on the `Scala.js`
 implementation of `BigDecimal` which may change) so you should **NOT** try and catch it.
 
-You just need to be strict and not use the `JNumber` string constructor in `Scala.js` so that this error is never thrown.
+You just need to be strict and not use the `JNumber` `String` constructor in `Scala.js` so that this error is never thrown.
 
 When using `Scala` on the `JVM` there is no exported `String` method for `JNumber`.
