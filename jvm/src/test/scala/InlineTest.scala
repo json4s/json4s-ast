@@ -1,18 +1,8 @@
-import noInline.org.json4s.ast
 import org.json4s.ast.{JArray, JObject, JNumber, JString}
+import org.scalameter.PerformanceTest.Microbenchmark
 import org.scalameter.api._
 
-object InlineTest extends PerformanceTest {
-
-  def warmer = Warmer.Zero
-  def aggregator = Aggregator.min
-  def measurer = new Measurer.IgnoringGC with Measurer.PeriodicReinstantiation {
-    override val defaultFrequency = 12
-    override val defaultFullGC = true
-  }
-  def executor = SeparateJvmsExecutor(warmer, aggregator, measurer)
-  def reporter = new LoggingReporter
-  def persistor = Persistor.None
+object InlineTest extends Microbenchmark {
   
   val sizes: Gen[Int] = Gen.range("size")(300000, 1500000, 300000)
 
@@ -37,7 +27,6 @@ object InlineTest extends PerformanceTest {
   } yield Map(size.toString -> size)
 
   performance of "Inline" in {
-    import org.json4s._
 
     measure method "A" in {
       using(strings) in {
