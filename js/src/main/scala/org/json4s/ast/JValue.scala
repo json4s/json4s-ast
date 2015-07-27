@@ -12,17 +12,13 @@ case object JNull extends JValue
 case class JString(value: String) extends JValue
 
 object JNumber{
-  private val mc = BigDecimal.defaultMathContext
   def apply(value: Int): JNumber = JNumber(BigDecimal(value))
   def apply(value: Byte): JNumber = JNumber(BigDecimal(value))
   def apply(value: Short): JNumber = JNumber(BigDecimal(value))
   def apply(value: Long): JNumber = JNumber(BigDecimal(value))
   def apply(value: BigInt): JNumber = JNumber(BigDecimal(value))
-  def apply(value: Float): JNumber = JNumber({
-    // BigDecimal.decimal doesn't exist on 2.10, so this is just the 2.11 implementation
-    new BigDecimal(new java.math.BigDecimal(value.toString, mc), mc) // Need to check that this will work on Scala.js
-  })
   def apply(value: Double): JNumber = JNumber(BigDecimal(value))
+  def apply(value: Float): JNumber = JNumber(BigDecimal(value.toDouble)) // In Scala.js, float has the same representation as double
 }
 
 @JSExportAll

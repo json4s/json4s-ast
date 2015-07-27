@@ -55,14 +55,25 @@ case object JFalse extends JBoolean {
   val value = false
 }
 
+@JSExportAll
+case class JField(field:String, value:JValue)
+
 /**
  * JObject is internally represented as a mutable Array, to improve sequential performance
  * @param value
  */
 @JSExportAll
-case class JObject(value: js.Array[(String,JValue)] = js.Array()) extends JValue {
+case class JObject(private val value: js.Array[JField] = js.Array()) extends JValue {
   @JSExportAll def this(value: js.Dictionary[JValue]) = {
-    this(value.to[js.Array])
+    this({
+      val array:js.Array[JField] = new js.Array()
+      var index = 0
+      value.foreach{case(key,value) =>
+        array(index) = JField(key,value)
+        index = index + 1
+      }
+      array
+    })
   }
 }
 
@@ -71,4 +82,4 @@ case class JObject(value: js.Array[(String,JValue)] = js.Array()) extends JValue
  * @param value
  */
 @JSExportAll
-case class JArray(value: js.Array[JValue] = js.Array()) extends JValue
+case class JArray(private val value: js.Array[JValue] = js.Array()) extends JValue

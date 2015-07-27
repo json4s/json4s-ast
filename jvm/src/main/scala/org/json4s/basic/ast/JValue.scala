@@ -41,11 +41,13 @@ case object JFalse extends JBoolean {
   val value = false
 }
 
+case class JField(field:String, value:JValue)
+
 /**
  * JObject is internally represented as a mutable Array, to improve sequential performance
  * @param value
  */
-case class JObject(value: Array[(String,JValue)] = Array.empty) extends JValue
+case class JObject(value: Array[JField] = Array.empty) extends JValue
 
 /**
  * JArray is internally represented as a mutable Array, to improve sequential performance
