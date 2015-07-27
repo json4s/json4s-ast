@@ -1,7 +1,7 @@
 package org.json4s.ast
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.{JSExportAll, JSExport}
+import scala.scalajs.js.annotation.JSExportAll
 
 sealed abstract class JValue extends Product with Serializable
 
@@ -27,7 +27,7 @@ object JNumber{
 
 @JSExportAll
 case class JNumber(value: BigDecimal) extends JValue {
-  def to[B](implicit bigDecimalConverter: BigDecimalConverter[B]) = bigDecimalConverter(value)
+  def to[B](implicit bigDecimalConverter: JNumberConverter[B]) = bigDecimalConverter(value)
 
   /**
    * Javascript specification for numbers specify a `Double`, so this is the default export method to `Javascript`
@@ -73,22 +73,21 @@ case class JObject(value: Map[String,JValue] = Map.empty) extends JValue {
    * Construct a JObject using Javascript's object type, i.e. {} or new Object
    * @param value
    */
-  @JSExport def this(value : js.Dictionary[JValue]) = {
+  @JSExportAll def this(value : js.Dictionary[JValue]) = {
     this(value.toMap)
   }
 }
 
 object JArray {
-  def apply(value: JValue, values: JValue*): JArray = JArray(value +: values.to[collection.immutable.Seq])
-  def apply(value: Seq[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
+  def apply(value: JValue, values: JValue*): JArray = JArray(value +: values.to[Vector])
 }
 
-case class JArray(value: collection.immutable.Seq[JValue] = Nil) extends JValue {
+case class JArray(value: Vector[JValue] = Vector.empty) extends JValue {
   /**
    * Construct a JArray using Javascript's array type, i.e. [] or new Array
    * @param value
    */
   @JSExportAll def this(value: js.Array[JValue]) = {
-    this(value.to[collection.immutable.Seq])
+    this(value.to[Vector])
   }
 }

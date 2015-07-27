@@ -21,7 +21,7 @@ object JNumber{
 }
 
 case class JNumber(value: BigDecimal) extends JValue {
-  def to[B](implicit bigDecimalConverter: BigDecimalConverter[B]) = bigDecimalConverter(value)
+  def to[B](implicit bigDecimalConverter: JNumberConverter[B]) = bigDecimalConverter(value)
 }
 
 sealed abstract class JBoolean extends JValue {
@@ -42,7 +42,6 @@ case object JFalse extends JBoolean {
 case class JObject(value: Map[String,JValue] = Map.empty) extends JValue
 
 object JArray {
-  def apply(value: JValue, values: JValue*): JArray = JArray(value +: values.to[collection.immutable.Seq])
-  def apply(value:Seq[JValue]): JArray = JArray(value.to[collection.immutable.Seq])
+  def apply(value: JValue, values: JValue*): JArray = JArray(value +: values.to[Vector])
 }
-case class JArray(value: collection.immutable.Seq[JValue] = Nil) extends JValue
+case class JArray(value: Vector[JValue] = Vector.empty) extends JValue

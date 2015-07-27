@@ -1,38 +1,38 @@
 package org.json4s
 
 package object ast {
-  trait BigDecimalConverter[T]{  def apply(b: BigDecimal): T }
+  trait JNumberConverter[T]{  def apply(b: BigDecimal): T }
 
-  object BigDecimalConverter {
-    implicit val bigDecimalToByte = new BigDecimalConverter[Byte] {
+  object JNumberConverter {
+    implicit val JNumberToByte = new JNumberConverter[Byte] {
       def apply(b: BigDecimal): Byte = b.byteValue()
     }
 
-    implicit val bigDecimalToInt = new BigDecimalConverter[Int] {
+    implicit val JNumberToInt = new JNumberConverter[Int] {
       def apply(b: BigDecimal): Int = b.intValue()
     }
 
-    implicit val bigDecimalToShort = new BigDecimalConverter[Short] {
+    implicit val JNumberToShort = new JNumberConverter[Short] {
       def apply(b: BigDecimal): Short = b.shortValue()
     }
 
-    implicit val bigDecimalToLong = new BigDecimalConverter[Long] {
+    implicit val JNumberToLong = new JNumberConverter[Long] {
       def apply(b: BigDecimal): Long = b.longValue()
     }
 
-    implicit val bigDecimalToBigInt = new BigDecimalConverter[BigInt] {
+    implicit val JNumberToBigInt = new JNumberConverter[BigInt] {
       def apply(b: BigDecimal): BigInt = b.toBigInt()
     }
 
-    implicit val bigDecimalToFloat = new BigDecimalConverter[Float] {
+    implicit val JNumberToFloat = new JNumberConverter[Float] {
       def apply(b: BigDecimal): Float = b.floatValue()
     }
 
-    implicit val bigDecimalToDouble = new BigDecimalConverter[Double] {
+    implicit val JNumberToDouble = new JNumberConverter[Double] {
       def apply(b: BigDecimal): Double = b.doubleValue()
     }
 
-    implicit val bigDecimalToBigDecimal = new BigDecimalConverter[BigDecimal] {
+    implicit val JNumberToBigDecimal = new JNumberConverter[BigDecimal] {
       def apply(b: BigDecimal): BigDecimal = b
     }
 
