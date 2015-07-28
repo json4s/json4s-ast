@@ -37,22 +37,22 @@ case class JNumber(value: String) extends JValue {
 }
 
 sealed abstract class JBoolean extends JValue {
-  val value: Boolean
+  val isTrue: Boolean
 }
 
 object JBoolean {
   def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
-  def unapply(x: JBoolean): Option[Boolean] = Some(x.value)
+  def unapply(x: JBoolean): Option[Boolean] = Some(x.isTrue)
 }
 
 @JSExportAll
 case object JTrue extends JBoolean {
-  val value = true
+  val isTrue = true
 }
 
 @JSExportAll
 case object JFalse extends JBoolean {
-  val value = false
+  val isTrue = false
 }
 
 @JSExportAll
