@@ -24,6 +24,10 @@ case class JNumber(value: BigDecimal) extends JValue {
   def to[B](implicit bigDecimalConverter: JNumberConverter[B]) = bigDecimalConverter(value)
 }
 
+/**
+ * Implements named extractors so we can avoid boxing
+ */
+
 sealed abstract class JBoolean extends JValue {
   def isEmpty: Boolean
   def get: Boolean

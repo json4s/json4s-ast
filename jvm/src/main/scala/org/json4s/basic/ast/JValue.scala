@@ -25,6 +25,10 @@ case class JNumber(value: String) extends JValue {
   def to[B](implicit jNumberConverter: JNumberConverter[B]) = jNumberConverter(value)
 }
 
+/**
+ * Implements named extractors so we can avoid boxing
+ */
+
 sealed abstract class JBoolean extends JValue {
   def isEmpty: Boolean
   def get: Boolean
