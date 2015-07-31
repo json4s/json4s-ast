@@ -26,17 +26,17 @@ forcing web frameworks to roll their own approaches (which end up being very sim
 
 `json4s-ast` is an attempt to provide a stable pure correct implementation as well as a high performance implementation of a
 [JSON](https://en.wikipedia.org/wiki/JSON) value, called a `JValue`. This means, that when a user works with a `JValue`
-(either the `org.json4s.basic.ast` or `org.json4s.ast` version), they can be sure that they can freely pass it around, 
+(either the `org.json4s.ast.safe.fast` or `org.json4s.ast.safe` version), they can be sure that they can freely pass it around, 
 through various `Scala` [JSON](https://en.wikipedia.org/wiki/JSON) parsers/serializers/libraries/frameworks without 
 having to worry about compatibility issues.
 
-If a user uses a `org.json4s.basic.ast.JValue` directly/indirectly, they will have a pretty good guarantee about performance 
+If a user uses a `org.json4s.ast.safe.fast.JValue` directly/indirectly, they will have a pretty good guarantee about performance 
 (can't guarantee good performance for indirect use).
-If a user uses a `org.json4s.ast.JValue` directly, they will have a guarantee that the `JValue` is a correct representation of
+If a user uses a `org.json4s.ast.safe.JValue` directly, they will have a guarantee that the `JValue` is a correct representation of
 [JSON](https://en.wikipedia.org/wiki/JSON) standard.
 
-## json4s Basic AST
-Implementation is in `org.json4s.basic.ast`
+## json4s Fast AST
+Implementation is in `org.json4s.ast.safe.fast`
 
 ### Goals
 - Uses the best performing datastructure's for high performance in construction of a `JValue`
@@ -47,8 +47,8 @@ Implementation is in `org.json4s.basic.ast`
 - Low memory allocation (due to usage of `Array`). When `Scala` provides better support for `Value` types, we will use
 those
 
-## json4s AST
-Implementation is in `org.json4s.ast`
+## json4s Safe AST
+Implementation is in `org.json4s.ast.safe`
 
 ### Goals
 - Fully immutable (all collections/types used are immutable)
@@ -61,7 +61,7 @@ Implementation is in `org.json4s.ast`
     - `JArray` is an `Vector`
 - Strictly pure. Library has no side effects/throwing errors (even when constructing various `JValue`'s), and hence we can
 guarantee that a `JValue` will always contain a valid structure that can be 
-serialized/rendered into [JSON](https://en.wikipedia.org/wiki/JSON). There is one exception, and that is for `org.json4s.ast.JNumber` 
+serialized/rendered into [JSON](https://en.wikipedia.org/wiki/JSON). There is one exception, and that is for `org.json4s.ast.safe.JNumber` 
 in `Scala.js` (see `Scala.js` section for more info)
 
 ## Scala.js
@@ -75,32 +75,32 @@ object with `JValue` as keys (i.e. `{}`).
 Examples of constructing various `JValue`'s are given below.
 
 ```javascript
-var jArray = new org.json4s.ast.JArray([new JString("test")]);
+var jArray = new org.json4s.ast.safe.JArray([new JString("test")]);
 
-var jObject = new org.json4s.ast.JObject({"someString" : jArray});
+var jObject = new org.json4s.ast.safe.JObject({"someString" : jArray});
 
-var jObjectWithBool = new org.json4s.ast.JObject({
+var jObjectWithBool = new org.json4s.ast.safe.JObject({
     "someString" : jArray,
-    "someBool" : org.json4s.ast.JTrue()
+    "someBool" : org.json4s.ast.safe.JTrue()
 });
 
-var jObjectWithBoolAndNumber = new org.json4s.ast.JObject({
+var jObjectWithBoolAndNumber = new org.json4s.ast.safe.JObject({
     "someString" : jArray,
-    "someBool" : org.json4s.ast.JTrue(),
-    "someNumber" : new org.json4s.ast.JNumber(324324.324)
+    "someBool" : org.json4s.ast.safe.JTrue(),
+    "someNumber" : new org.json4s.ast.safe.JNumber(324324.324)
 });
 
-var jObjectWithBoolAndNumberAndNull = new org.json4s.ast.JObject({
+var jObjectWithBoolAndNumberAndNull = new org.json4s.ast.safe.JObject({
     "someString" : jArray,
-    "someBool" : org.json4s.ast.JTrue(),
-    "someNumber" : new org.json4s.ast.JNumber(324324.324),
-    "null: org.json4s.ast.JNull()
+    "someBool" : org.json4s.ast.safe.JTrue(),
+    "someNumber" : new org.json4s.ast.safe.JNumber(324324.324),
+    "null: org.json4s.ast.safe.JNull()
 });
 ```
 
 ### Differences
 There is one major difference that people need to be aware of when using `json4s-ast` with `Scala.js`, and that is an
-exception may be thrown when using the `JNumber` `String` constructor for the pure version of `json4s-ast` (`org.json4s.ast`). 
+exception may be thrown when using the `JNumber` `String` constructor for the pure version of `json4s-ast` (`org.json4s.ast.safe`). 
 Unfortunately there is no real way around this. `Javascript` doesn't have a standard `BigDecimal` 
 (i.e. unbounded real number type), so the only way to construct a `JNumber` larger than specified in the IEEE 754 
 in `Javascript` is to use a `String` representation ([JSON](https://en.wikipedia.org/wiki/JSON) 
@@ -111,29 +111,29 @@ in `Javascript`/`Scala.js`, it will error out. As an example below
 
 ```javascript
 // How to construct a really large JNumber in Javascript
-var jNumber = new org.json4s.ast.JNumber("34235325322353257498327423.23532875932598234783252325");
+var jNumber = new org.json4s.ast.safe.JNumber("34235325322353257498327423.23532875932598234783252325");
 // Understandably, this will error
-var jNumber = new org.json4s.ast.JNumber("this will error");
+var jNumber = new org.json4s.ast.safe.JNumber("this will error");
 ```
 
 Obviously in `Javascript`, this will always error out in runtime, but since the `String` constructor is exported for `Scala`
 as well (only in the `Scala.js` artifact, not the `Scala` `JVM` one), you can do this when writing `Scala` with `Scala.js`
 ```scala
-val jNumber = new org.json4s.ast.JNumber("this will error")
+val jNumber = new org.json4s.ast.safe.JNumber("this will error")
 ```
 This will error out with an exception at runtime. Note that the actual exception is not known (this depends on the `Scala.js`
 implementation of `BigDecimal` which may change) so you should **NOT** try and catch it.
 
 You just need to be strict and not use the `JNumber` `String` constructor in `Scala.js` so that this error is never thrown.
 
-When using `Scala` on the `JVM` there is no exported `String` method for `JNumber`. Also when using the `org.json4s.ast.basic`
+When using `Scala` on the `JVM` there is no exported `String` method for `JNumber`. Also when using the `org.json4s.ast.safe.basic`
 library, you can expect runtime errors for incorrect usage (however this is implied by design of the library).
 
-For the `org.json4s.basic.ast`, the API is the same as `org.json4s.ast`. One major difference is that while `org.json4s.basic.ast`
-uses `Array` on the JVM, on `Scala.js` it uses `js.Array`. This is because `org.json4s.basic.ast` is focused on performance, and
+For the `org.json4s.ast.safe.fast`, the API is the same as `org.json4s.ast.safe`. One major difference is that while `org.json4s.ast.safe.fast`
+uses `Array` on the JVM, on `Scala.js` it uses `js.Array`. This is because `org.json4s.ast.safe.fast` is focused on performance, and
 `js.Array` is by far the best performing linear data structure for `Scala.js` on `Javascript`. If you have common code that uses
-`org.json4s.basic.ast` in both `Scala` `JVM` and `Scala.js` **and** you wish to retain performance (i.e. no usage of 
+`org.json4s.ast.safe.fast` in both `Scala` `JVM` and `Scala.js` **and** you wish to retain performance (i.e. no usage of 
 `toArray`/`toJSArray`), you need to refactor that common code so you can handle this.
 
-As an added note, there is an extra constructor for a `Javascript` number type in `org.json4s.basic.ast` (i.e. you can 
-do `var jNumber = new org.json4s.basic.ast.JObject.JNumber(3254);`)
+As an added note, there is an extra constructor for a `Javascript` number type in `org.json4s.ast.safe.fast` (i.e. you can 
+do `var jNumber = new org.json4s.ast.safe.fast.JObject.JNumber(3254);`)

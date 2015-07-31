@@ -1,3 +1,4 @@
+import org.json4s.ast.safe
 import org.scalameter.PerformanceTest.Microbenchmark
 import org.scalameter.api._
 
@@ -19,7 +20,7 @@ object JBooleanVariants extends Microbenchmark {
   performance of "CaseObject" in {
     measure method "construct" in {
       using(bools) in {
-        b => org.json4s.ast.JBoolean(b)
+        b => safe.JBoolean(b)
       }
     }
   }

@@ -1,4 +1,4 @@
-package org.json4s.basic.ast
+package org.json4s.ast.fast
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportAll

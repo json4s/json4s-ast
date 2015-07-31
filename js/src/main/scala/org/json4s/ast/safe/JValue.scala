@@ -1,4 +1,4 @@
-package org.json4s.ast
+package org.json4s.ast.safe
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportAll
@@ -34,7 +34,7 @@ case class JNumber(value: BigDecimal) extends JValue {
   }
 
   /**
-   * String constructor, so its possible to construct a [[org.json4s.ast.JNumber]] with a larger precision
+   * String constructor, so its possible to construct a [[JNumber]] with a larger precision
    * than the one defined by the IEEE 754. Note that when using it in Scala.js, it is possible for this to throw an
    * exception at runtime if you don't put in a correct number format for a [[scala.math.BigDecimal]].
    * @param value

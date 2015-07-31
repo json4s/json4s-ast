@@ -1,4 +1,4 @@
-package org.json4s.ast
+package org.json4s.ast.safe
 
 sealed abstract class JValue extends Product with Serializable
 

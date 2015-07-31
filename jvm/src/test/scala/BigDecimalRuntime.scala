@@ -11,7 +11,7 @@ object BigDecimalRuntime extends Microbenchmark {
   } yield size.toString.toCharArray
 
   performance of "BigDecimal" in {
-    import org.json4s.ast.JNumber
+    import org.json4s.ast.safe.JNumber
     measure method "construct" in {
       using(chars) in {
         c => JNumber(BigDecimal(c.mkString))

@@ -1,6 +1,6 @@
-package org.json4s
+package org.json4s.ast
 
-package object ast {
+package object safe {
   trait JNumberConverter[T]{  def apply(b: BigDecimal): T }
 
   object JNumberConverter {

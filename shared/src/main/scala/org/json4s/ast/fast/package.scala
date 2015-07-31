@@ -1,6 +1,6 @@
-package org.json4s.basic
+package org.json4s.ast
 
-package object ast {
+package object fast {
   trait JNumberConverter[T]{  def apply(s: String): T }
 
   object JNumberConverter {
