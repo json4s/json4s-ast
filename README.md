@@ -1,5 +1,7 @@
 # json4s AST
 
+[![Build Status](https://travis-ci.org/json4s/json4s-ast.svg?branch=master)](https://travis-ci.org/json4s/json4s-ast)
+
 Two minimal implementations of a [JSON](https://en.wikipedia.org/wiki/JSON) `AST`, one that is designed for
 performance and another that is designed for correctness/purity.
 
