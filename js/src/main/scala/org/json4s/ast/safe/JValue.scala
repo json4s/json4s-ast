@@ -1,15 +1,30 @@
 package org.json4s.ast.safe
 
+import org.json4s.ast.fast
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportAll
 
-sealed abstract class JValue extends Product with Serializable
+sealed abstract class JValue extends Product with Serializable {
+  
+  /**
+   * Converts a [[org.json4s.ast.safe.JValue]] to a [[org.json4s.ast.fast.JValue]]. Note that
+   * when converting [[org.json4s.ast.fast.JObject]], this can produce [[org.json4s.ast.fast.JArray]] of
+   * unknown ordering, since ordering on a [[scala.collection.Map]] isn't defined.
+   * @return
+   */
+  
+  def toFast: org.json4s.ast.fast.JValue
+}
 
 @JSExportAll
-case object JNull extends JValue
+case object JNull extends JValue {
+  def toFast: fast.JValue = fast.JNull
+}
 
 @JSExportAll
-case class JString(value: String) extends JValue
+case class JString(value: String) extends JValue {
+  def toFast:fast.JValue = fast.JString(value)
+}
 
 object JNumber{
   def apply(value: Int): JNumber = JNumber(BigDecimal(value))
@@ -42,6 +57,8 @@ case class JNumber(value: BigDecimal) extends JValue {
   @JSExportAll def this(value:String) = {
     this(BigDecimal(value))
   }
+  
+  def toFast: fast.JValue = fast.JNumber(value)
 }
 
 /**
@@ -62,12 +79,16 @@ object JBoolean {
 case object JTrue extends JBoolean {
   def isEmpty = false
   def get = true
+
+  def toFast: fast.JValue = fast.JTrue
 }
 
 @JSExportAll
 case object JFalse extends JBoolean {
   def isEmpty = false
   def get = false
+
+  def toFast: fast.JValue = fast.JFalse
 }
 
 case class JObject(value: Map[String,JValue] = Map.empty) extends JValue {
@@ -78,6 +99,20 @@ case class JObject(value: Map[String,JValue] = Map.empty) extends JValue {
    */
   @JSExportAll def this(value : js.Dictionary[JValue]) = {
     this(value.toMap)
+  }
+
+  def toFast: fast.JValue = {
+    if (value.isEmpty) {
+      fast.JObject(js.Array[fast.JField]())
+    } else {
+      val iterator = value.iterator
+      val array = js.Array[fast.JField]()
+      while (iterator.hasNext) {
+        val (k,v) = iterator.next()
+        array.push(fast.JField(k,v.toFast))
+      }
+      fast.JObject(array)
+    }
   }
 }
 
@@ -92,5 +127,18 @@ case class JArray(value: Vector[JValue] = Vector.empty) extends JValue {
    */
   @JSExportAll def this(value: js.Array[JValue]) = {
     this(value.to[Vector])
+  }
+
+  def toFast: fast.JValue = {
+    if (value.isEmpty) {
+      fast.JArray(js.Array[fast.JValue]())
+    } else {
+      val iterator = value.iterator
+      val array = js.Array[fast.JValue]()
+      while (iterator.hasNext) {
+        array.push(iterator.next().toFast)
+      }
+      fast.JArray(array)
+    }
   }
 }

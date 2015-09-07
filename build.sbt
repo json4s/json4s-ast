@@ -26,7 +26,7 @@ lazy val json4sAST = crossProject.in(file(".")).
     javacOptions ++= Seq("-deprecation", "-Xlint"),
     testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework"),
     libraryDependencies ++= Seq(
-      "com.storm-enroute" %% "scalameter" % "0.6" % "test"
+      "com.storm-enroute" %% "scalameter" % "0.7" % "test"
     ),
     parallelExecution in Test := false
   ).

@@ -55,9 +55,7 @@ Implementation is in `org.json4s.ast.safe`
 ### Goals
 - Fully immutable (all collections/types used are immutable)
 - `constant`/`effective constant` lookup time for `JArray`/`JObject`
-- Strict adherence to the [JSON](https://en.wikipedia.org/wiki/JSON) standard. 
-    - No `JNothing`,`JUndefined` (i.e. no abstraction for a concept of `null` that isn't a `Javascript` `null`, which is
-    represented as a `JNull`)
+- Strict adherence to the [JSON](https://en.wikipedia.org/wiki/JSON) standard.
     - Number representation for `JNumber` is a `BigDecimal` (http://stackoverflow.com/a/13502497/1519631)
     - `JObject` is an actual `Map[String,JValue]`
     - `JArray` is an `Vector`
@@ -65,6 +63,39 @@ Implementation is in `org.json4s.ast.safe`
 guarantee that a `JValue` will always contain a valid structure that can be 
 serialized/rendered into [JSON](https://en.wikipedia.org/wiki/JSON). There is one exception, and that is for `org.json4s.ast.safe.JNumber` 
 in `Scala.js` (see `Scala.js` section for more info)
+
+## Conversion between org.json4s.ast.safe and org.json4s.ast.fast
+
+Any `org.json4s.ast.safe.JValue` implements a conversion to `org.json4s.ast.fast.JValue` with a `toFast` method, and vice versa with a
+`toSafe` method. These conversion methods have been written to be as fast as possible.
+
+There are some peculiarities when converting between the two AST's. When converting a `org.json4s.ast.fast.JNumber` to a 
+`org.json4s.ast.safe.JNumber`, it is possible for this to fail at runtime (since the internal representation of 
+`org.json4s.ast.fast.JNumber` is a string). It is up to the caller on how to handle this error (and when), 
+a runtime check is deliberately avoided on our end for performance reasons.
+
+Converting from a `org.json4s.ast.safe.JObject` to a `org.json4s.ast.fast.JObject` will produce 
+an `org.json4s.ast.fast.JObject` with an undefined ordering for its internal `Array`/`js.Array` representation.
+This is because a `Map` has no predefined ordering. If you wish to provide ordering, you will either need
+to write your own custom conversion to handle this case.
+
+Do note that according to the JSON spec, ordering for JObject is not defined. Also note that `Map` 
+disregards ordering for equality, however `Array`/`js.Array` equals obviously takes ordering into account.
+
+## .to[T] Conversion
+
+Both `org.json4s.ast.safe.JValue` and `org.json4s.ast.fast.JValue` provide conversions using a `.to[T]` method. So far, these are only
+implemented for `JNumber`, and its to provide default fast implementations for converting between different number types (as well
+as stuff like bytes). You can provide your own implementations of a `.to[T]` 
+conversion by creating an `val` that implements a JNumberConverter, i.e.
+
+```scala
+implicit val myNumberConverter = new JNumberConverter[SomeNumberType]{
+  def apply(b: BigDecimal): SomeNumberType = ???
+}
+```
+
+Then you just need to provide this implementation in scope for usage
 
 ## Scala.js
 `json4s-ast` also provides support for [Scala.js](https://github.com/scala-js/scala-js). 
@@ -102,7 +133,7 @@ var jObjectWithBoolAndNumberAndNull = new org.json4s.ast.safe.JObject({
 
 ### Differences
 There is one major difference that people need to be aware of when using `json4s-ast` with `Scala.js`, and that is an
-exception may be thrown when using the `JNumber` `String` constructor for the pure version of `json4s-ast` (`org.json4s.ast.safe`). 
+exception may be thrown when using the `JNumber` `String` constructor for the safe version of `json4s-ast` (`org.json4s.ast.safe`). 
 Unfortunately there is no real way around this. `Javascript` doesn't have a standard `BigDecimal` 
 (i.e. unbounded real number type), so the only way to construct a `JNumber` larger than specified in the IEEE 754 
 in `Javascript` is to use a `String` representation ([JSON](https://en.wikipedia.org/wiki/JSON) 
@@ -128,14 +159,14 @@ implementation of `BigDecimal` which may change) so you should **NOT** try and c
 
 You just need to be strict and not use the `JNumber` `String` constructor in `Scala.js` so that this error is never thrown.
 
-When using `Scala` on the `JVM` there is no exported `String` method for `JNumber`. Also when using the `org.json4s.ast.safe.basic`
+When using `Scala` on the `JVM` there is no exported `String` method for `JNumber`. Also when using the `org.json4s.ast.fast`
 library, you can expect runtime errors for incorrect usage (however this is implied by design of the library).
 
-For the `org.json4s.ast.safe.fast`, the API is the same as `org.json4s.ast.safe`. One major difference is that while `org.json4s.ast.safe.fast`
-uses `Array` on the JVM, on `Scala.js` it uses `js.Array`. This is because `org.json4s.ast.safe.fast` is focused on performance, and
+For the `org.json4s.ast.fast`, the API is the same as `org.json4s.ast.safe`. One major difference is that while `org.json4s.ast.fast`
+uses `Array` on the JVM, on `Scala.js` it uses `js.Array`. This is because `org.json4s.ast.fast` is focused on performance, and
 `js.Array` is by far the best performing linear data structure for `Scala.js` on `Javascript`. If you have common code that uses
-`org.json4s.ast.safe.fast` in both `Scala` `JVM` and `Scala.js` **and** you wish to retain performance (i.e. no usage of 
+`org.json4s.ast.fast` in both `Scala` `JVM` and `Scala.js` **and** you wish to retain performance (i.e. no usage of 
 `toArray`/`toJSArray`), you need to refactor that common code so you can handle this.
 
-As an added note, there is an extra constructor for a `Javascript` number type in `org.json4s.ast.safe.fast` (i.e. you can 
+As an added note, there is an extra constructor for a `Javascript` number type in `org.json4s.ast.fast` (i.e. you can 
 do `var jNumber = new org.json4s.ast.safe.fast.JObject.JNumber(3254);`)
