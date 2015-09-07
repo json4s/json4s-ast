@@ -90,7 +90,7 @@ case class JField(field:String, value:JValue)
  * @param value
  */
 @JSExportAll
-case class JObject(private val value: js.Array[JField] = js.Array()) extends JValue {
+case class JObject(value: js.Array[JField] = js.Array()) extends JValue {
   @JSExportAll def this(value: js.Dictionary[JValue]) = {
     this({
       val array:js.Array[JField] = new js.Array()
@@ -126,7 +126,7 @@ case class JObject(private val value: js.Array[JField] = js.Array()) extends JVa
  * @param value
  */
 @JSExportAll
-case class JArray(private val value: js.Array[JValue] = js.Array()) extends JValue {
+case class JArray(value: js.Array[JValue] = js.Array()) extends JValue {
   def toSafe: safe.JValue = {
     // Javascript array.length across all major browsers has near constant cost, so we
     // use this to build the array http://jsperf.com/length-comparisons
