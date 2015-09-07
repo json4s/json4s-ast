@@ -1,7 +1,6 @@
-import org.scalameter.PerformanceTest.Microbenchmark
 import org.scalameter.api._
 
-object BigDecimalRuntime extends Microbenchmark {
+object BigDecimalRuntime extends Bench.ForkedTime {
 
   val sizes: Gen[Int] = Gen.range("size")(300000, 1500000, 300000)
   
