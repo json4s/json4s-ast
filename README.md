@@ -141,7 +141,7 @@ var jObjectWithBoolAndNumberAndNull = new org.json4s.ast.safe.JObject({
     "someString" : jArray,
     "someBool" : org.json4s.ast.safe.JTrue(),
     "someNumber" : new org.json4s.ast.safe.JNumber(324324.324),
-    "null: org.json4s.ast.safe.JNull()
+    "null": org.json4s.ast.safe.JNull()
 });
 ```
 
