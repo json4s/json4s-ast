@@ -15,10 +15,105 @@ lazy val json4sAST = crossProject.in(file(".")).
     scalaVersion := scala211Version,
     organization := "org.json4s",
     crossScalaVersions := Seq(scala211Version,scala210Version),
-    homepage := Some(new URL("https://github.com/json4s/json4s-ast")),
     licenses := Seq(("MIT", new URL("https://github.com/json4s/json4s-ast/raw/HEAD/LICENSE"))),
     startYear := Some(2013),
-    scmInfo := Some(ScmInfo(url("http://github.com/json4s/json4s-ast"), "scm:git:git://github.com/json4s/json4s-ast.git", Some("scm:git:git@github.com:json4s/json4s-ast.git")))
+    publishMavenStyle := true,
+    publishTo := {
+      val nexus = "https://oss.sonatype.org/"
+      if (isSnapshot.value)
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+        Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    },
+    publishArtifact in Test := false,
+    pomIncludeRepository := { _ => false },
+    pomExtra := <url>https://github.com/json4s/json4s-ast</url>
+      <licenses>
+        <license>
+          <name>Apache</name>
+          <url>http://opensource.org/licenses/Apache-2.0</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+      <scm>
+        <url>git@github.com:json4s/json4s-ast.git</url>
+        <connection>scm:git:git@github.com:json4s/json4s-ast.git</connection>
+      </scm>
+      <developers>
+        <developer>
+          <id>casualjim</id>
+          <name>Ivan Porto Carrero</name>
+          <email>ivan@flanders.co.nz</email>
+          <url>http://flanders.co.nz</url>
+        </developer>
+        <developer>
+          <id>rossabaker</id>
+          <name>Ross A. Baker</name>
+          <email>ross@rossabaker.com</email>
+          <url>http://www.rossabaker.com/</url>
+        </developer>
+        <developer>
+          <id>mdedetrich</id>
+          <name>Matthew de Detrich</name>
+          <email>mdedetrich@gmail.com</email>
+          <url>http://mdedetrich.github.io</url>
+        </developer>
+      </developers>
+      <organization>
+        <name>json4s</name>
+        <url>http://json4s.org</url>
+      </organization>
+      <contributors>
+        <contributor>
+          <name>Bryce Anderson</name>
+          <email>bryce.anderson22@gmail.com</email>
+          <url>http://bryceanderson.net</url>
+        </contributor>
+        <contributor>
+          <name>Eugene Yokota</name>
+          <id>eed3si9n</id>
+          <email>eed3si9n@gmail.com</email>
+          <url>http://eed3si9n.com/</url>
+        </contributor>
+        <contributor>
+          <name>Matt Farmer</name>
+          <id>farmdawgnation</id>
+          <email>http://farmdawgnation.com</email>
+          <url>http://eed3si9n.com/</url>
+        </contributor>
+        <contributor>
+          <name>James Roper</name>
+          <id>jroper</id>
+          <email>james@jazzy.id.au</email>
+          <url>https://jazzy.id.au/</url>
+        </contributor>
+        <contributor>
+          <name>Johannes Rudolph</name>
+          <id>jrudolph</id>
+          <email>johannes.rudolph@gmail.com</email>
+          <url>http://virtual-void.net</url>
+        </contributor>
+        <contributor>
+          <name>Erik Osheim</name>
+          <id>non</id>
+        </contributor>
+        <contributor>
+          <name>Jon Pretty</name>
+          <id>propensive</id>
+          <url>http://rapture.io/</url>
+        </contributor>
+        <contributor>
+          <name>Kazuhiro Sera</name>
+          <id>seratch</id>
+          <email>seratch@gmail.com</email>
+          <url>http://seratch.net//</url>
+        </contributor>
+        <contributor>
+          <name>Mathias</name>
+          <id>sirthias</id>
+          <url>http://www.decodified.com</url>
+        </contributor>
+      </contributors>
   ).
   jvmSettings(
     // Add JVM-specific settings here
