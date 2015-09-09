@@ -183,4 +183,4 @@ uses `Array` on the JVM, on `Scala.js` it uses `js.Array`. This is because `org.
 `toArray`/`toJSArray`), you need to refactor that common code so you can handle this.
 
 As an added note, there is an extra constructor for a `Javascript` number type in `org.json4s.ast.fast` (i.e. you can 
-do `var jNumber = new org.json4s.ast.safe.fast.JObject.JNumber(3254);`)
+do `var jNumber = new org.json4s.ast.safe.fast.JNumber(3254);`)
