@@ -15,7 +15,6 @@ lazy val json4sAST = crossProject.in(file(".")).
     scalaVersion := scala211Version,
     organization := "org.json4s",
     crossScalaVersions := Seq(scala211Version,scala210Version),
-    licenses := Seq(("MIT", new URL("https://github.com/json4s/json4s-ast/raw/HEAD/LICENSE"))),
     startYear := Some(2013),
     publishMavenStyle := true,
     publishTo := {
