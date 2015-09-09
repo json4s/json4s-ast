@@ -5,6 +5,11 @@
 Two minimal implementations of a [JSON](https://en.wikipedia.org/wiki/JSON) `AST`, one that is designed for
 performance and another that is designed for correctness/purity.
 
+# Installation
+
+json4s-ast is currently published as a SNAPSHOT under sonatype with the following details
+
+
 ## Common Goals between both AST's
 - [Scala.js](https://github.com/scala-js/scala-js) support, allowing the possibility of 
 libraries to seamlessly work with `JValue` on `Javascript` clients as well as the `JVM`
