@@ -42,17 +42,17 @@ forcing web frameworks to roll their own approaches (which end up being very sim
 
 `json4s-ast` is an attempt to provide a stable pure correct implementation as well as a high performance implementation of a
 [JSON](https://en.wikipedia.org/wiki/JSON) value, called a `JValue`. This means, that when a user works with a `JValue`
-(either the `org.json4s.ast.safe.fast` or `org.json4s.ast.safe` version), they can be sure that they can freely pass it around, 
+(either the `org.json4s.ast.fast` or `org.json4s.ast.safe` version), they can be sure that they can freely pass it around, 
 through various `Scala` [JSON](https://en.wikipedia.org/wiki/JSON) parsers/serializers/libraries/frameworks without 
 having to worry about compatibility issues.
 
-If a user uses a `org.json4s.ast.safe.fast.JValue` directly/indirectly, they will have a pretty good guarantee about performance 
+If a user uses a `org.json4s.ast.fast.JValue` directly/indirectly, they will have a pretty good guarantee about performance 
 (can't guarantee good performance for indirect use).
 If a user uses a `org.json4s.ast.safe.JValue` directly, they will have a guarantee that the `JValue` is a correct representation of
 [JSON](https://en.wikipedia.org/wiki/JSON) standard.
 
 ## json4s Fast AST
-Implementation is in `org.json4s.ast.safe.fast`
+Implementation is in `org.json4s.ast.fast`
 
 ### Goals
 - Uses the best performing datastructure's for high performance in construction of a `JValue`
@@ -183,4 +183,4 @@ uses `Array` on the JVM, on `Scala.js` it uses `js.Array`. This is because `org.
 `toArray`/`toJSArray`), you need to refactor that common code so you can handle this.
 
 As an added note, there is an extra constructor for a `Javascript` number type in `org.json4s.ast.fast` (i.e. you can 
-do `var jNumber = new org.json4s.ast.safe.fast.JNumber(3254);`)
+do `var jNumber = new org.json4s.ast.fast.JNumber(3254);`)
