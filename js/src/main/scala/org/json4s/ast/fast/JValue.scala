@@ -57,18 +57,19 @@ case class JNumber(value: String) extends JValue {
  */
 
 sealed abstract class JBoolean extends JValue {
-  def isEmpty: Boolean
   def get: Boolean
 }
 
 object JBoolean {
   def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
-  def unapply(x: JBoolean): Some[Boolean] = Some(x.isEmpty)
+  def unapply(x: JBoolean): Some[Boolean] = x match {
+    case JTrue => Some(true)
+    case JFalse => Some(false)
+  }
 }
 
 @JSExportAll
 case object JTrue extends JBoolean {
-  def isEmpty = false
   def get = true
 
   def toSafe: safe.JValue = safe.JTrue
@@ -76,7 +77,6 @@ case object JTrue extends JBoolean {
 
 @JSExportAll
 case object JFalse extends JBoolean {
-  def isEmpty = false
   def get = false
 
   def toSafe: safe.JValue = safe.JTrue

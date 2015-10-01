@@ -66,18 +66,19 @@ case class JNumber(value: BigDecimal) extends JValue {
  */
 
 sealed abstract class JBoolean extends JValue {
-  def isEmpty: Boolean
   def get: Boolean
 }
 
 object JBoolean {
   def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
-  def unapply(x: JBoolean): Some[Boolean] = Some(x.isEmpty)
+  def unapply(x: JBoolean): Some[Boolean] = x match {
+    case JTrue => Some(true)
+    case JFalse => Some(false)
+  }
 }
 
 @JSExportAll
 case object JTrue extends JBoolean {
-  def isEmpty = false
   def get = true
 
   def toFast: fast.JValue = fast.JTrue
@@ -85,7 +86,6 @@ case object JTrue extends JBoolean {
 
 @JSExportAll
 case object JFalse extends JBoolean {
-  def isEmpty = false
   def get = false
 
   def toFast: fast.JValue = fast.JFalse
