@@ -10,13 +10,13 @@ performance and another that is designed for correctness/purity.
 json4s-ast is currently published as a SNAPSHOT under sonatype with the following details
 
 ```scala
-"org.json4s" %% "ast" % "4.0.0-SNAPSHOT"
+"org.json4s" %% "ast" % "4.0.0-SNAPSHOT-2"
 ```
 
 If you are using `Scala.js`, its at
 
 ```scala
-"org.json4s" %%% "ast" % "4.0.0-SNAPSHOT"
+"org.json4s" %%% "ast" % "4.0.0-SNAPSHOT-2"
 ```
 
 ## Common Goals between both AST's

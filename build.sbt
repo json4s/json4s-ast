@@ -11,7 +11,7 @@ lazy val root = project.in(file(".")).
 lazy val json4sAST = crossProject.in(file(".")).
   settings(
     name := "json4s-ast",
-    version := "4.0.0-SNAPSHOT",
+    version := "4.0.0-SNAPSHOT-2",
     scalaVersion := scala211Version,
     organization := "org.json4s",
     crossScalaVersions := Seq(scala211Version,scala210Version),
