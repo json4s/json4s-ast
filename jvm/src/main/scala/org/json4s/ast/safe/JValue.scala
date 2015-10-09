@@ -53,7 +53,7 @@ sealed abstract class JBoolean extends JValue {
 
 object JBoolean {
   def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
-  def unapply(x: JBoolean): Some[Boolean] = Some(x.isEmpty)
+  def unapply(x: JBoolean): Some[Boolean] = Some(x.get)
 }
 
 case object JTrue extends JBoolean {
