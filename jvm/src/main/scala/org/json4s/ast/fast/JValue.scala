@@ -47,7 +47,6 @@ case class JNumber(value: String) extends JValue {
  */
 
 sealed abstract class JBoolean extends JValue {
-  def isEmpty: Boolean
   def get: Boolean
 }
 
@@ -57,7 +56,6 @@ object JBoolean {
 }
 
 case object JTrue extends JBoolean {
-  def isEmpty = false
   def get = true
 
   def toSafe: safe.JValue = safe.JTrue
