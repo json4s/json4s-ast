@@ -70,8 +70,6 @@ case object JTrue extends JBoolean {
 }
 
 case object JFalse extends JBoolean {
-  def isEmpty = false
-
   def get = false
 
   def toSafe: safe.JValue = safe.JFalse
