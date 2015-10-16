@@ -23,7 +23,7 @@ case class JString(value: String) extends JValue {
 }
 
 object JNumber {
-  private val mc = BigDecimal.defaultMathContext
+  private final val mc = BigDecimal.defaultMathContext
 
   def apply(value: Int): JNumber = JNumber(BigDecimal(value))
 
