@@ -1,7 +1,10 @@
 package org.json4s.ast
 
 package object safe {
-  trait JNumberConverter[T]{  def apply(b: BigDecimal): T }
+
+  trait JNumberConverter[T] {
+    def apply(b: BigDecimal): T
+  }
 
   object JNumberConverter {
     implicit val JNumberToByte = new JNumberConverter[Byte] {
@@ -37,4 +40,5 @@ package object safe {
     }
 
   }
+
 }

@@ -21,18 +21,25 @@ case object JNull extends JValue {
 }
 
 @JSExportAll
-case class JString(value:String) extends JValue {
+case class JString(value: String) extends JValue {
   def toSafe: safe.JValue = safe.JString(value)
 }
 
 object JNumber {
   def apply(value: Int): JNumber = JNumber(value.toString)
+
   def apply(value: Byte): JNumber = JNumber(value.toString)
+
   def apply(value: Short): JNumber = JNumber(value.toString)
+
   def apply(value: Long): JNumber = JNumber(value.toString)
+
   def apply(value: BigInt): JNumber = JNumber(value.toString)
+
   def apply(value: BigDecimal): JNumber = JNumber(value.toString)
+
   def apply(value: Float): JNumber = JNumber(value.toString)
+
   def apply(value: Double): JNumber = JNumber(value.toString)
 }
 
@@ -62,6 +69,7 @@ sealed abstract class JBoolean extends JValue {
 
 object JBoolean {
   def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
+
   def unapply(x: JBoolean): Some[Boolean] = Some(x.get)
 }
 
@@ -80,7 +88,7 @@ case object JFalse extends JBoolean {
 }
 
 @JSExportAll
-case class JField(field:String, value:JValue)
+case class JField(field: String, value: JValue)
 
 /**
  * JObject is internally represented as a mutable Array, to improve sequential performance
@@ -90,9 +98,9 @@ case class JField(field:String, value:JValue)
 case class JObject(value: js.Array[JField] = js.Array()) extends JValue {
   @JSExportAll def this(value: js.Dictionary[JValue]) = {
     this({
-      val array:js.Array[JField] = new js.Array()
+      val array: js.Array[JField] = new js.Array()
       for (key <- value.keys) {
-        array.push(JField(key,value(key)))
+        array.push(JField(key, value(key)))
       }
       array
     })
@@ -102,15 +110,15 @@ case class JObject(value: js.Array[JField] = js.Array()) extends JValue {
     // Javascript array.length across all major browsers has near constant cost, so we
     // use this to build the array http://jsperf.com/length-comparisons
     val length = value.length
-    
+
     if (length == 0) {
-      safe.JObject(Map.newBuilder[String,safe.JValue].result())
+      safe.JObject(Map.newBuilder[String, safe.JValue].result())
     } else {
-      val b = Map.newBuilder[String,safe.JValue].result()
+      val b = Map.newBuilder[String, safe.JValue].result()
       var index = 0
       while (index < length) {
         val v = value(index)
-        b + ((v.field,v.value.toSafe))
+        b + ((v.field, v.value.toSafe))
         index = index + 1
       }
       safe.JObject(b)

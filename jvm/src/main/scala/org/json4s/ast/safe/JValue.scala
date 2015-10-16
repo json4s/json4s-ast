@@ -10,7 +10,7 @@ sealed abstract class JValue extends Product with Serializable {
    * unknown ordering, since ordering on a [[scala.collection.Map]] isn't defined.
    * @return
    */
-  
+
   def toFast: fast.JValue
 }
 
@@ -22,17 +22,24 @@ case class JString(value: String) extends JValue {
   def toFast: fast.JValue = fast.JString(value)
 }
 
-object JNumber{
+object JNumber {
   private val mc = BigDecimal.defaultMathContext
+
   def apply(value: Int): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: Byte): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: Short): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: Long): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: BigInt): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: Float): JNumber = JNumber({
     // BigDecimal.decimal doesn't exist on 2.10, so this is just the 2.11 implementation
     new BigDecimal(new java.math.BigDecimal(java.lang.Float.toString(value), mc), mc)
   })
+
   def apply(value: Double): JNumber = JNumber(BigDecimal(value))
 }
 
@@ -52,6 +59,7 @@ sealed abstract class JBoolean extends JValue {
 
 object JBoolean {
   def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
+
   def unapply(x: JBoolean): Some[Boolean] = Some(x.get)
 }
 
@@ -63,20 +71,21 @@ case object JTrue extends JBoolean {
 
 case object JFalse extends JBoolean {
   def isEmpty = false
+
   def get = false
 
   def toFast: fast.JValue = fast.JFalse
 }
 
-case class JObject(value: Map[String,JValue] = Map.empty) extends JValue {
+case class JObject(value: Map[String, JValue] = Map.empty) extends JValue {
   def toFast: fast.JValue = {
     if (value.isEmpty) {
       fast.JArray(Array.ofDim[fast.JValue](0))
     } else {
       val array = Array.ofDim[fast.JField](value.size)
       var index = 0
-      for ((k,v) <- value) {
-        array(index) = fast.JField(k,v.toFast)
+      for ((k, v) <- value) {
+        array(index) = fast.JField(k, v.toFast)
         index = index + 1
       }
       fast.JObject(array)

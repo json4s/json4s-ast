@@ -5,14 +5,14 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportAll
 
 sealed abstract class JValue extends Product with Serializable {
-  
+
   /**
    * Converts a [[org.json4s.ast.safe.JValue]] to a [[org.json4s.ast.fast.JValue]]. Note that
    * when converting [[org.json4s.ast.fast.JObject]], this can produce [[org.json4s.ast.fast.JArray]] of
    * unknown ordering, since ordering on a [[scala.collection.Map]] isn't defined.
    * @return
    */
-  
+
   def toFast: org.json4s.ast.fast.JValue
 }
 
@@ -23,16 +23,22 @@ case object JNull extends JValue {
 
 @JSExportAll
 case class JString(value: String) extends JValue {
-  def toFast:fast.JValue = fast.JString(value)
+  def toFast: fast.JValue = fast.JString(value)
 }
 
-object JNumber{
+object JNumber {
   def apply(value: Int): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: Byte): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: Short): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: Long): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: BigInt): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: Double): JNumber = JNumber(BigDecimal(value))
+
   def apply(value: Float): JNumber = JNumber(BigDecimal(value.toDouble)) // In Scala.js, float has the same representation as double
 }
 
@@ -54,10 +60,10 @@ case class JNumber(value: BigDecimal) extends JValue {
    * exception at runtime if you don't put in a correct number format for a [[scala.math.BigDecimal]].
    * @param value
    */
-  @JSExportAll def this(value:String) = {
+  @JSExportAll def this(value: String) = {
     this(BigDecimal(value))
   }
-  
+
   def toFast: fast.JValue = fast.JNumber(value)
 }
 
@@ -71,6 +77,7 @@ sealed abstract class JBoolean extends JValue {
 
 object JBoolean {
   def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
+
   def unapply(x: JBoolean): Some[Boolean] = Some(x.get)
 }
 
@@ -88,13 +95,13 @@ case object JFalse extends JBoolean {
   def toFast: fast.JValue = fast.JFalse
 }
 
-case class JObject(value: Map[String,JValue] = Map.empty) extends JValue {
+case class JObject(value: Map[String, JValue] = Map.empty) extends JValue {
 
   /**
    * Construct a JObject using Javascript's object type, i.e. {} or new Object
    * @param value
    */
-  @JSExportAll def this(value : js.Dictionary[JValue]) = {
+  @JSExportAll def this(value: js.Dictionary[JValue]) = {
     this(value.toMap)
   }
 
@@ -105,8 +112,8 @@ case class JObject(value: Map[String,JValue] = Map.empty) extends JValue {
       val iterator = value.iterator
       val array = js.Array[fast.JField]()
       while (iterator.hasNext) {
-        val (k,v) = iterator.next()
-        array.push(fast.JField(k,v.toFast))
+        val (k, v) = iterator.next()
+        array.push(fast.JField(k, v.toFast))
       }
       fast.JObject(array)
     }

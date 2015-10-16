@@ -9,11 +9,11 @@ object JBooleanVariants extends Bench.ForkedTime {
   val bools: Gen[Boolean] = for {
     size <- sizes
   } yield {
-    if (size % 2 == 0)
-      true
-    else
-      false
-  }
+      if (size % 2 == 0)
+        true
+      else
+        false
+    }
 
   performance of "CaseObject" in {
     measure method "construct" in {

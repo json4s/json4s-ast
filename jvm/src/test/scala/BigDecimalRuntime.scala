@@ -3,7 +3,7 @@ import org.scalameter.api._
 object BigDecimalRuntime extends Bench.ForkedTime {
 
   val sizes: Gen[Int] = Gen.range("size")(300000, 1500000, 300000)
-  
+
   // Lets assume our input is an Array of characters, likely to be similar to what you would receive in JSON
   val chars: Gen[Array[Char]] = for {
     size <- sizes
@@ -17,7 +17,7 @@ object BigDecimalRuntime extends Bench.ForkedTime {
       }
     }
   }
-  
+
   performance of "String" in {
     case class JNumber(value: String)
     measure method "construct" in {

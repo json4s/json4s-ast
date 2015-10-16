@@ -1,7 +1,10 @@
 package org.json4s.ast
 
 package object fast {
-  trait JNumberConverter[T]{  def apply(s: String): T }
+
+  trait JNumberConverter[T] {
+    def apply(s: String): T
+  }
 
   object JNumberConverter {
     implicit val JNumberString2BigDecimal = new JNumberConverter[BigDecimal] {
@@ -40,4 +43,5 @@ package object fast {
       def apply(s: String): String = s
     }
   }
+
 }

@@ -17,18 +17,25 @@ case object JNull extends JValue {
   def toSafe: safe.JValue = safe.JNull
 }
 
-case class JString(value:String) extends JValue {
+case class JString(value: String) extends JValue {
   def toSafe: safe.JValue = safe.JString(value)
 }
 
 object JNumber {
   def apply(value: Int): JNumber = JNumber(value.toString)
+
   def apply(value: Byte): JNumber = JNumber(value.toString)
+
   def apply(value: Short): JNumber = JNumber(value.toString)
+
   def apply(value: Long): JNumber = JNumber(value.toString)
+
   def apply(value: BigInt): JNumber = JNumber(value.toString)
+
   def apply(value: BigDecimal): JNumber = JNumber(value.toString)
+
   def apply(value: Float): JNumber = JNumber(value.toString)
+
   def apply(value: Double): JNumber = JNumber(value.toString)
 }
 
@@ -52,6 +59,7 @@ sealed abstract class JBoolean extends JValue {
 
 object JBoolean {
   def apply(x: Boolean): JBoolean = if (x) JTrue else JFalse
+
   def unapply(x: JBoolean): Some[Boolean] = Some(x.get)
 }
 
@@ -63,12 +71,13 @@ case object JTrue extends JBoolean {
 
 case object JFalse extends JBoolean {
   def isEmpty = false
+
   def get = false
 
   def toSafe: safe.JValue = safe.JFalse
 }
 
-case class JField(field:String, value:JValue)
+case class JField(field: String, value: JValue)
 
 /**
  * JObject is internally represented as a mutable Array, to improve sequential performance
@@ -81,10 +90,10 @@ case class JObject(value: Array[JField] = Array.empty) extends JValue {
       safe.JObject(Map[String,safe.JValue]())
     } else {
       var index = 0
-      val b = Map.newBuilder[String,safe.JValue]
+      val b = Map.newBuilder[String, safe.JValue]
       while (index < length) {
         val v = value(index)
-        b += ((v.field,v.value.toSafe))
+        b += ((v.field, v.value.toSafe))
         index = index + 1
       }
       safe.JObject(b.result())
