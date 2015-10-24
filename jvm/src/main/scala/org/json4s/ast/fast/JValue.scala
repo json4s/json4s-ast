@@ -22,7 +22,9 @@ case class JString(value: String) extends JValue {
 }
 
 object JNumber {
-  def apply(value: Int): JNumber = JNumber(value.toString)
+  def apply(value: Int): JNumber = JNumber(value.toInt.toString)
+
+  def apply(value: Integer): JNumber = JNumber(value.toString)
 
   def apply(value: Byte): JNumber = JNumber(value.toString)
 

@@ -119,14 +119,24 @@ lazy val json4sAST = crossProject.in(file(".")).
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-optimize", "-feature", "-Yinline-warnings"),
     javacOptions ++= Seq("-deprecation", "-Xlint"),
     testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework"),
+    testFrameworks += new TestFramework("utest.runner.Framework"),
     libraryDependencies ++= Seq(
-      "com.storm-enroute" %% "scalameter" % "0.7" % "test"
+      "com.storm-enroute" %% "scalameter" % "0.7" % Test,
+      "org.specs2" %% "specs2-core" % "3.6.5" % Test,
+      "org.specs2" %% "specs2-scalacheck" % "3.6.5" % Test,
+      "org.scalacheck" %% "scalacheck" % "1.12.5" % Test,
+      "com.lihaoyi" %% "utest" % "0.3.1" % Test
     ),
     parallelExecution in Test := false
   ).
   jsSettings(
     // Add JS-specific settings here
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Yinline-warnings")
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Yinline-warnings"),
+    testFrameworks += new TestFramework("utest.runner.Framework"),
+    libraryDependencies ++= Seq(
+      "org.scalacheck" %%% "scalacheck" % "1.12.5" % Test,
+      "com.lihaoyi" %%% "utest" % "0.3.1" % Test
+    )
   )
 
 lazy val json4sASTJVM = json4sAST.jvm

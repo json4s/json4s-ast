@@ -41,6 +41,8 @@ object JNumber {
   })
 
   def apply(value: Double): JNumber = JNumber(BigDecimal(value))
+  
+  def apply(value: Integer): JNumber = JNumber(BigDecimal(value))
 }
 
 case class JNumber(value: BigDecimal) extends JValue {

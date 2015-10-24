@@ -41,6 +41,8 @@ object JNumber {
   def apply(value: Float): JNumber = JNumber(value.toString)
 
   def apply(value: Double): JNumber = JNumber(value.toString)
+  
+  def apply(value: Integer): JNumber = JNumber(value.toString)
 }
 
 /**

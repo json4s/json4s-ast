@@ -28,6 +28,8 @@ case class JString(value: String) extends JValue {
 
 object JNumber {
   def apply(value: Int): JNumber = JNumber(BigDecimal(value))
+  
+  def apply(value: Integer): JNumber = JNumber(BigDecimal(value))
 
   def apply(value: Byte): JNumber = JNumber(BigDecimal(value))
 

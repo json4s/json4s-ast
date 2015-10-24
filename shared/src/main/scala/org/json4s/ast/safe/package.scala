@@ -15,6 +15,10 @@ package object safe {
       def apply(b: BigDecimal): Int = b.intValue()
     }
 
+    implicit val JNumberToInteger = new JNumberConverter[Integer] {
+      def apply(b: BigDecimal): Integer = new Integer(b.intValue())
+    }
+
     implicit val JNumberToShort = new JNumberConverter[Short] {
       def apply(b: BigDecimal): Short = b.shortValue()
     }

@@ -19,6 +19,10 @@ package object fast {
       def apply(s: String): Int = s.toInt
     }
 
+    implicit val JNumberString2Integer = new JNumberConverter[Integer] {
+      def apply(s: String): Integer = new Integer(s)
+    }
+
     implicit val JNumberString2Double = new JNumberConverter[Double] {
       def apply(s: String): Double = s.toDouble
     }
