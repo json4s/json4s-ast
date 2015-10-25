@@ -185,7 +185,7 @@ case class JArray(value: Vector[JValue] = Vector.empty) extends JValue {
       val iterator = value.iterator
       val array = js.Array[fast.JValue]()
       while (iterator.hasNext) {
-        array.push(iterator.next().toFast)
+        array.push(iterator.next().toJsAny)
       }
       array
     }
