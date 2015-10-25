@@ -180,10 +180,10 @@ case class JArray(value: Vector[JValue] = Vector.empty) extends JValue {
   
   def toJsAny: js.Any = {
     if (value.isEmpty) {
-      js.Array[fast.JValue]()
+      js.Array[js.Any]()
     } else {
       val iterator = value.iterator
-      val array = js.Array[fast.JValue]()
+      val array = js.Array[js.Any]()
       while (iterator.hasNext) {
         array.push(iterator.next().toJsAny)
       }
