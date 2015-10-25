@@ -124,8 +124,7 @@ lazy val json4sAST = crossProject.in(file(".")).
       "com.storm-enroute" %% "scalameter" % "0.7" % Test,
       "org.specs2" %% "specs2-core" % "3.6.5" % Test,
       "org.specs2" %% "specs2-scalacheck" % "3.6.5" % Test,
-      "org.scalacheck" %% "scalacheck" % "1.12.5" % Test,
-      "com.lihaoyi" %% "utest" % "0.3.1" % Test
+      "org.scalacheck" %% "scalacheck" % "1.12.5" % Test
     ),
     parallelExecution in Test := false
   ).
@@ -135,8 +134,7 @@ lazy val json4sAST = crossProject.in(file(".")).
     testFrameworks += new TestFramework("utest.runner.Framework"),
     testFrameworks += new TestFramework("org.scalacheck.ScalaCheckFramework"),
     libraryDependencies ++= Seq(
-      "org.scalacheck" %%% "scalacheck" % "1.12.5" % Test,
-      "com.lihaoyi" %%% "utest" % "0.3.1" % Test
+      "org.scalacheck" %%% "scalacheck" % "1.12.5" % Test
     )
   )
 
