@@ -14,16 +14,28 @@ sealed abstract class JValue extends Product with Serializable {
    */
 
   def toFast: org.json4s.ast.fast.JValue
+
+  /**
+   * Converts a [[org.json4s.ast.safe.JValue]] to a Javascript object/value that can be used within
+   * Javascript
+   * @return
+   */
+  
+  def toJsAny: js.Any
 }
 
 @JSExportAll
 case object JNull extends JValue {
   def toFast: fast.JValue = fast.JNull
+  
+  def toJsAny: js.Any = null
 }
 
 @JSExportAll
 case class JString(value: String) extends JValue {
   def toFast: fast.JValue = fast.JString(value)
+  
+  def toJsAny: js.Any = value
 }
 
 object JNumber {
@@ -67,6 +79,8 @@ case class JNumber(value: BigDecimal) extends JValue {
   }
 
   def toFast: fast.JValue = fast.JNumber(value)
+  
+  def toJsAny: js.Any = value.toInt
 }
 
 /**
@@ -75,6 +89,8 @@ case class JNumber(value: BigDecimal) extends JValue {
 
 sealed abstract class JBoolean extends JValue {
   def get: Boolean
+  
+  def toJsAny: js.Any = get
 }
 
 object JBoolean {
@@ -120,6 +136,20 @@ case class JObject(value: Map[String, JValue] = Map.empty) extends JValue {
       fast.JObject(array)
     }
   }
+  
+  def toJsAny: js.Any = {
+    if (value.isEmpty) {
+      js.Dictionary[js.Any]().empty
+    } else {
+      val iterator = value.iterator
+      val dict = js.Dictionary[js.Any]()
+      while (iterator.hasNext) {
+        val (k, v) = iterator.next()
+        dict(k) = v.toJsAny
+      }
+      dict
+    }
+  }
 }
 
 object JArray {
@@ -145,6 +175,19 @@ case class JArray(value: Vector[JValue] = Vector.empty) extends JValue {
         array.push(iterator.next().toFast)
       }
       fast.JArray(array)
+    }
+  }
+  
+  def toJsAny: js.Any = {
+    if (value.isEmpty) {
+      js.Array[fast.JValue]()
+    } else {
+      val iterator = value.iterator
+      val array = js.Array[fast.JValue]()
+      while (iterator.hasNext) {
+        array.push(iterator.next().toFast)
+      }
+      array
     }
   }
 }

@@ -37,15 +37,15 @@ class JNumber extends Spec { def is = s2"""
     JNumber(i).value must beEqualTo(BigDecimal(i))
   }
 
-  def readDoubleJNumber = prop{d: Double =>
+  def readDoubleJNumber = prop {d: Double =>
     JNumber(d).value must beEqualTo(BigDecimal(d))
   }
 
-  def readFloatJNumber = prop{f: Float =>
+  def readFloatJNumber = prop {f: Float =>
     JNumber(f).value must beEqualTo(new BigDecimal(new java.math.BigDecimal(java.lang.Float.toString(f), mc), mc))
   }
 
-  def readShortJNumber = prop{s: Short =>
+  def readShortJNumber = prop {s: Short =>
     JNumber(s).value must beEqualTo(BigDecimal(s))
   }
 }

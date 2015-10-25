@@ -133,6 +133,7 @@ lazy val json4sAST = crossProject.in(file(".")).
     // Add JS-specific settings here
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Yinline-warnings"),
     testFrameworks += new TestFramework("utest.runner.Framework"),
+    testFrameworks += new TestFramework("org.scalacheck.ScalaCheckFramework"),
     libraryDependencies ++= Seq(
       "org.scalacheck" %%% "scalacheck" % "1.12.5" % Test,
       "com.lihaoyi" %%% "utest" % "0.3.1" % Test

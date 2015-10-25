@@ -13,16 +13,27 @@ sealed abstract class JValue extends Serializable with Product {
    * @return
    */
   def toSafe: safe.JValue
+
+  /**
+   * Converts a [[org.json4s.ast.fast.JValue]] to a Javascript object/value that can be used within
+   * Javascript
+   * @return
+   */
+  def toJsAny: js.Any
 }
 
 @JSExportAll
 case object JNull extends JValue {
   def toSafe: safe.JValue = safe.JNull
+  
+  def toJsAny: js.Any = null
 }
 
 @JSExportAll
 case class JString(value: String) extends JValue {
   def toSafe: safe.JValue = safe.JString(value)
+  
+  def toJsAny: js.Any = value
 }
 
 object JNumber {
@@ -59,6 +70,8 @@ case class JNumber(value: String) extends JValue {
   @JSExportAll def this(value: Double) = {
     this(value.toString)
   }
+  
+  def toJsAny: js.Any = value.toInt
 }
 
 /**
@@ -67,6 +80,8 @@ case class JNumber(value: String) extends JValue {
 
 sealed abstract class JBoolean extends JValue {
   def get: Boolean
+  
+  def toJsAny: js.Any = get
 }
 
 object JBoolean {
@@ -126,6 +141,24 @@ case class JObject(value: js.Array[JField] = js.Array()) extends JValue {
       safe.JObject(b)
     }
   }
+
+  def toJsAny: js.Any = {
+    val length = value.length
+
+    if (length == 0) {
+      js.Dictionary[js.Any]().empty
+    } else {
+      val dict = js.Dictionary[js.Any]()
+      
+      var index = 0
+      while (index < length) {
+        val v = value(index)
+        dict(v.field) = v.value.toJsAny
+        index = index + 1
+      }
+      dict
+    }
+  }
 }
 
 /**
@@ -150,4 +183,6 @@ case class JArray(value: js.Array[JValue] = js.Array()) extends JValue {
       safe.JArray(b.result())
     }
   }
+  
+  def toJsAny: js.Any = value
 }
