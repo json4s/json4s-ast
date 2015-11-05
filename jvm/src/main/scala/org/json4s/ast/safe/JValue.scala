@@ -5,11 +5,13 @@ import org.json4s.ast.fast
 sealed abstract class JValue extends Product with Serializable {
 
   /**
-   * Converts a [[org.json4s.ast.safe.JValue]] to a [[org.json4s.ast.fast.JValue]]. Note that
-   * when converting [[org.json4s.ast.fast.JObject]], this can produce [[org.json4s.ast.fast.JArray]] of
-   * unknown ordering, since ordering on a [[scala.collection.Map]] isn't defined.
-   * @return
-   */
+    * Converts a [[org.json4s.ast.fast.JValue]] to a [[org.json4s.ast.safe.JValue]]. Note that
+    * when converting [[org.json4s.ast.fast.JString]], this can throw runtime error if the underlying
+    * string representation is not a correct number. Also when converting a [[org.json4s.ast.fast.JObject]]
+    * to a [[org.json4s.ast.safe.JObject]], its possible to lose data if you have duplicate keys. Duplicate
+    * keys are not allowed in JSON as per RFC-4627 
+    * @return
+    */
 
   def toFast: fast.JValue
 }
@@ -41,7 +43,7 @@ object JNumber {
   })
 
   def apply(value: Double): JNumber = JNumber(BigDecimal(value))
-  
+
   def apply(value: Integer): JNumber = JNumber(BigDecimal(value))
 }
 
@@ -52,8 +54,8 @@ case class JNumber(value: BigDecimal) extends JValue {
 }
 
 /**
- * Implements named extractors so we can avoid boxing
- */
+  * Implements named extractors so we can avoid boxing
+  */
 
 sealed abstract class JBoolean extends JValue {
   def get: Boolean

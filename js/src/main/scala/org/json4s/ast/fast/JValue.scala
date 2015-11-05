@@ -7,32 +7,35 @@ import scala.scalajs.js.annotation.JSExportAll
 sealed abstract class JValue extends Serializable with Product {
 
   /**
-   * Converts a [[org.json4s.ast.fast.JValue]] to a [[org.json4s.ast.safe.JValue]]. Note that
-   * when converting [[org.json4s.ast.fast.JString]], this can throw runtime error if the underlying
-   * string representation is not a correct number
-   * @return
-   */
+    * Converts a [[org.json4s.ast.fast.JValue]] to a [[org.json4s.ast.safe.JValue]]. Note that
+    * when converting [[org.json4s.ast.fast.JString]], this can throw runtime error if the underlying
+    * string representation is not a correct number. Also when converting a [[org.json4s.ast.fast.JObject]]
+    * to a [[org.json4s.ast.safe.JObject]], its possible to lose data if you have duplicate keys. Duplicate
+    * keys are not allowed in JSON as per RFC-4627 
+    * @return
+    */
+  
   def toSafe: safe.JValue
 
   /**
-   * Converts a [[org.json4s.ast.fast.JValue]] to a Javascript object/value that can be used within
-   * Javascript
-   * @return
-   */
+    * Converts a [[org.json4s.ast.fast.JValue]] to a Javascript object/value that can be used within
+    * Javascript
+    * @return
+    */
   def toJsAny: js.Any
 }
 
 @JSExportAll
 case object JNull extends JValue {
   def toSafe: safe.JValue = safe.JNull
-  
+
   def toJsAny: js.Any = null
 }
 
 @JSExportAll
 case class JString(value: String) extends JValue {
   def toSafe: safe.JValue = safe.JString(value)
-  
+
   def toJsAny: js.Any = value
 }
 
@@ -52,14 +55,14 @@ object JNumber {
   def apply(value: Float): JNumber = JNumber(value.toString)
 
   def apply(value: Double): JNumber = JNumber(value.toString)
-  
+
   def apply(value: Integer): JNumber = JNumber(value.toString)
 }
 
 /**
- * JNumber is internally represented as a string, to improve performance
- * @param value
- */
+  * JNumber is internally represented as a string, to improve performance
+  * @param value
+  */
 
 @JSExportAll
 case class JNumber(value: String) extends JValue {
@@ -70,17 +73,17 @@ case class JNumber(value: String) extends JValue {
   @JSExportAll def this(value: Double) = {
     this(value.toString)
   }
-  
+
   def toJsAny: js.Any = value.toInt
 }
 
 /**
- * Implements named extractors so we can avoid boxing
- */
+  * Implements named extractors so we can avoid boxing
+  */
 
 sealed abstract class JBoolean extends JValue {
   def get: Boolean
-  
+
   def toJsAny: js.Any = get
 }
 
@@ -108,9 +111,9 @@ case object JFalse extends JBoolean {
 case class JField(field: String, value: JValue)
 
 /**
- * JObject is internally represented as a mutable Array, to improve sequential performance
- * @param value
- */
+  * JObject is internally represented as a mutable Array, to improve sequential performance
+  * @param value
+  */
 @JSExportAll
 case class JObject(value: js.Array[JField] = js.Array()) extends JValue {
   @JSExportAll def this(value: js.Dictionary[JValue]) = {
@@ -149,7 +152,7 @@ case class JObject(value: js.Array[JField] = js.Array()) extends JValue {
       js.Dictionary[js.Any]().empty
     } else {
       val dict = js.Dictionary[js.Any]()
-      
+
       var index = 0
       while (index < length) {
         val v = value(index)
@@ -162,9 +165,9 @@ case class JObject(value: js.Array[JField] = js.Array()) extends JValue {
 }
 
 /**
- * JArray is internally represented as a mutable Array, to improve sequential performance
- * @param value
- */
+  * JArray is internally represented as a mutable Array, to improve sequential performance
+  * @param value
+  */
 @JSExportAll
 case class JArray(value: js.Array[JValue] = js.Array()) extends JValue {
   def toSafe: safe.JValue = {
@@ -183,6 +186,6 @@ case class JArray(value: js.Array[JValue] = js.Array()) extends JValue {
       safe.JArray(b.result())
     }
   }
-  
+
   def toJsAny: js.Any = value
 }
