@@ -10,13 +10,13 @@ performance and another that is designed for correctness/purity.
 json4s-ast is currently published as a SNAPSHOT under sonatype with the following details
 
 ```scala
-"org.json4s" %% "json4s-ast" % "4.0.0-SNAPSHOT"
+"org.json4s" %% "json4s-ast" % "4.0.0-SNAPSHOT-3"
 ```
 
 If you are using `Scala.js`, it's at
 
 ```scala
-"org.json4s" %%% "json4s-ast" % "4.0.0-SNAPSHOT"
+"org.json4s" %%% "json4s-ast" % "4.0.0-SNAPSHOT-3"
 ```
 
 Add this setting to your build to include the Sonatype snapshot repository:
