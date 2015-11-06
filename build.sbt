@@ -58,10 +58,6 @@ lazy val json4sAST = crossProject.in(file(".")).
           <url>http://mdedetrich.github.io</url>
         </developer>
       </developers>
-      <organization>
-        <name>json4s</name>
-        <url>http://json4s.org</url>
-      </organization>
       <contributors>
         <contributor>
           <name>Bryce Anderson</name>
