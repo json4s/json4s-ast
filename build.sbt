@@ -40,19 +40,16 @@ lazy val json4sAST = crossProject.in(file(".")).
       </scm>
       <developers>
         <developer>
-          <id>casualjim</id>
           <name>Ivan Porto Carrero</name>
           <email>ivan@flanders.co.nz</email>
           <url>http://flanders.co.nz</url>
         </developer>
         <developer>
-          <id>rossabaker</id>
           <name>Ross A. Baker</name>
           <email>ross@rossabaker.com</email>
           <url>http://www.rossabaker.com/</url>
         </developer>
         <developer>
-          <id>mdedetrich</id>
           <name>Matthew de Detrich</name>
           <email>mdedetrich@gmail.com</email>
           <url>http://mdedetrich.github.io</url>
@@ -66,45 +63,37 @@ lazy val json4sAST = crossProject.in(file(".")).
         </contributor>
         <contributor>
           <name>Eugene Yokota</name>
-          <id>eed3si9n</id>
           <email>eed3si9n@gmail.com</email>
           <url>http://eed3si9n.com/</url>
         </contributor>
         <contributor>
           <name>Matt Farmer</name>
-          <id>farmdawgnation</id>
           <url>http://farmdawgnation.com/</url>
         </contributor>
         <contributor>
           <name>James Roper</name>
-          <id>jroper</id>
           <email>james@jazzy.id.au</email>
           <url>https://jazzy.id.au/</url>
         </contributor>
         <contributor>
           <name>Johannes Rudolph</name>
-          <id>jrudolph</id>
           <email>johannes.rudolph@gmail.com</email>
           <url>http://virtual-void.net</url>
         </contributor>
         <contributor>
           <name>Erik Osheim</name>
-          <id>non</id>
         </contributor>
         <contributor>
           <name>Jon Pretty</name>
-          <id>propensive</id>
           <url>http://rapture.io/</url>
         </contributor>
         <contributor>
           <name>Kazuhiro Sera</name>
-          <id>seratch</id>
           <email>seratch@gmail.com</email>
           <url>http://seratch.net//</url>
         </contributor>
         <contributor>
           <name>Mathias</name>
-          <id>sirthias</id>
           <url>http://www.decodified.com</url>
         </contributor>
       </contributors>
