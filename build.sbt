@@ -73,7 +73,6 @@ lazy val json4sAST = crossProject.in(file(".")).
         <contributor>
           <name>Matt Farmer</name>
           <id>farmdawgnation</id>
-          <email>http://farmdawgnation.com</email>
           <url>http://farmdawgnation.com/</url>
         </contributor>
         <contributor>
