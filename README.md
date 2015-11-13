@@ -38,8 +38,8 @@ brought in breaking changes in minor releases)
 ## Why
 Scala is in a bit of an unfortunate position when it comes to [JSON](https://en.wikipedia.org/wiki/JSON) libraries and
 compatibility. On last count, we have around 5 commonly used `AST`'s. A lot of web frameworks,
-such as [Spray](http://spray.io/),[Play](https://www.playframework.com/) and [Liftweb](https://www.playframework.com/) 
-provide their own `AST`'s, mainly due to address issue of the 
+such as [Spray](http://spray.io/), [Play](https://www.playframework.com/) and [Liftweb](http://liftweb.net/) 
+provide their own `AST`'s, mainly due to address issues of the 
 [JSON](https://en.wikipedia.org/wiki/JSON) `AST`'s in the past.
 
 A lot of previously mentioned [JSON](https://en.wikipedia.org/wiki/JSON) library's also fall into weird middle
